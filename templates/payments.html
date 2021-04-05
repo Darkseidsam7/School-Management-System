@@ -1,0 +1,338 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.Payments}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <a ng-if="userRole == 'admin'" ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.addPayment}}</a>
+  <div ng-if="userRole == 'admin'" class="btn-group pull-right">
+      <button type="button" class="btn btn-success btn-flat">{{phrase.Export}}</button>
+      <button type="button" class="btn btn-success btn-flat dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+          <span class="sr-only">{{phrase.toggleDropdown}}</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+          <li><a href="payments/export/excel">{{phrase.ExportExcel}}</a></li>
+          <li><a href="payments/export/pdf" target="_BLANK">{{phrase.ExportPDF}}</a></li>
+      </ul>
+  </div>
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listPayments}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.paymentTitleDate}}</th>
+                  <th>{{phrase.paymentDesc}}</th>
+                  <th>{{phrase.student}}</th>
+                  <th>{{phrase.Amount}}</th>
+                  <th>{{phrase.Status}}</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="payment in payments | filter:searchText">
+                  <td>{{payment.id}}</td>
+                  <td>{{payment.paymentTitle}} - {{payment.paymentDate}}</td>
+                  <td>{{payment.paymentDescription}}</td>
+                  <td><a href="" ng-click="studentProfile( payment.studentId )">{{payment.fullName}}</a></td>
+                  <td>{{payment.paymentAmount}}</td>
+                  <td>
+                    <span ng-click="alertPaidData(payment.id)" ng-show="payment.paymentStatus == '1'" style='color:green;cursor:pointer;'>{{phrase.paid}}</span>
+                    <span ng-show="payment.paymentStatus == '0'" style='color:red;'>
+                      {{phrase.unpaid}}
+                    </span>
+                  </td>
+                  <td>
+                    <a ng-click="seeInvoice(payment.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.viewInvoice}}" tooltip><i class="fa fa-usd"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="edit(payment.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="remove(payment,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!payments.length"><td class="noTableData" colspan="7">{{phrase.noPayments}}</td></tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addPayment}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addPayment" role="form" ng-submit="saveAdd()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addPayment.paymentTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.paymentTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="paymentTitle" ng-model="form.paymentTitle" class="form-control" required placeholder="{{phrase.paymentTitle}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.paymentDesc}}</label>
+          <div class="col-sm-10">
+            <textarea name="paymentDescription" class="form-control" ng-model="form.paymentDescription" placeholder="{{phrase.paymentDesc}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addPayment.studentClass.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.students}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="paymentStudent" ng-model="form.paymentStudent" required multiple>
+              <option ng-repeat="student in students" value="{{student.id}}">{{student.fullName}} - [{{student.studentRollId}}] - {{phrase.class}} : {{classes[student.studentClass]}}</option>
+            </select>
+            <small>{{phrase.paymentSelectMultiple}}</small>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addPayment.paymentAmount.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Amount}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="paymentAmount" ng-model="form.paymentAmount" class="form-control" required placeholder="Payment amount">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addPayment.paymentStatus.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Status}} *</label>
+          <div class="col-sm-10">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="paymentStatus" value="0" ng-model="form.paymentStatus" required checked="checked">
+                    {{phrase.unpaid}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="paymentStatus" value="1" ng-model="form.paymentStatus" required>
+                    {{phrase.paid}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addPayment.paymentDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}}</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="paymentDate" ng-model="form.paymentDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addPayment.$invalid">{{phrase.addPayment}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editPayment}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editPayment" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addPayment.paymentTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.paymentTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="paymentTitle" ng-model="form.paymentTitle" class="form-control" required placeholder="{{phrase.paymentTitle}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.paymentDesc}}</label>
+          <div class="col-sm-10">
+            <textarea name="paymentDescription" class="form-control" ng-model="form.paymentDescription" placeholder="{{phrase.paymentDesc}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addPayment.studentClass.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.students}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="paymentStudent" ng-model="form.paymentStudent" required>
+              <option ng-repeat="student in students" value="{{student.id}}">{{student.fullName}} - [{{student.studentRollId}}] - {{phrase.class}} : {{classes[student.studentClass]}}</option>
+            </select>
+            <small>{{phrase.paymentSelectMultiple}}</small>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addPayment.paymentAmount.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Amount}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="paymentAmount" ng-model="form.paymentAmount" class="form-control" required placeholder="Payment amount">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addPayment.paymentStatus.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Status}} *</label>
+          <div class="col-sm-10">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="paymentStatus" value="0" ng-model="form.paymentStatus" required checked="checked">
+                    {{phrase.unpaid}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="paymentStatus" value="1" ng-model="form.paymentStatus" required>
+                    {{phrase.paid}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addPayment.paymentDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}}</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="paymentDate" ng-model="form.paymentDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editPayment.$invalid">{{phrase.editPayment}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.invoice">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.viewInvoice}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    <i class="fa fa-globe"></i> {{invoice.siteTitle}}
+                    <small class="pull-right">{{phrase.Date}} : {{invoice.payment.paymentDate}}</small>
+                </h2>
+            </div><!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col">
+                {{phrase.from}}
+                <address>
+                    <strong>{{invoice.siteTitle}}</strong><br>
+                    {{invoice.address}}<br>
+                    {{invoice.address2}}<br>
+                    {{phrase.phoneNo}}: {{invoice.phoneNo}}<br/>
+                    {{phrase.email}}: {{invoice.systemEmail}}
+                </address>
+            </div><!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                {{phrase.tp}}
+                <address>
+                    <strong>{{invoice.user.fullName}}</strong><br>
+                    {{invoice.user.address}}<br>
+                    {{phrase.phoneNo}}: {{invoice.user.phoneNo}}<br/>
+                    {{phrase.email}}: {{invoice.user.email}}
+                </address>
+            </div><!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+              <span ng-show="invoice.payment.paymentStatus == '1'" style='color:green; font-size:30px;font-weight:bold;'>{{phrase.paid}}</span>
+              <span ng-show="invoice.payment.paymentStatus == '0'" style='color:red; font-size:30px;font-weight:bold;'>
+                {{phrase.unpaid}}
+              </span>
+              <form ng-show="invoice.payment.paymentStatus == '0' && invoice.paypalPayment != ''" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                <input type="hidden" name="business" value="{{invoice.paypalPayment}}">
+                <input type="hidden" name="cmd" value="_xclick">
+                <input type="hidden" name="item_name" value="{{invoice.payment.paymentTitle}}">
+                <input type="hidden" name="item_number" value="{{invoice.payment.id}}">
+                <input type="hidden" name="amount" value="{{invoice.totalWithTax}}">
+                <input type="hidden" name="currency_code" value="USD">
+                <input type='hidden' name='rm' value='2'>
+                <input type='hidden' name='cancel_return' value='{{invoice.baseUrl + "/payments/failed"}}'>
+                <input type='hidden' name='return' value='{{invoice.baseUrl + "/payments/success/" + invoice.payment.paymentUniqid}}'>
+                <input type="image" name="submit" border="0"
+                src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online">
+                <img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
+              </form>
+              
+            </div>
+        </div><!-- /.row -->
+
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-xs-12 table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>{{phrase.Product}}</th>
+                            <th>{{phrase.Description}}</th>
+                            <th>{{phrase.Subtotal}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{invoice.payment.paymentTitle}}</td>
+                            <td>{{invoice.payment.paymentDescription}}</td>
+                            <td>${{invoice.payment.paymentAmount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+
+        <div class="row">
+            <!-- accepted payments column -->
+            <div class="col-xs-6"></div><!-- /.col -->
+            <div class="col-xs-6">
+                <p class="lead"><br/>{{phrase.AmountDue}} {{invoice.payment.paymentDate}}</p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th style="width:50%">{{phrase.Subtotal}}:</th>
+                            <td>${{invoice.payment.paymentAmount}}</td>
+                        </tr>
+                        <tr>
+                            <th>{{phrase.payTax}} ({{invoice.paymentTax}}%)</th>
+                            <td>${{invoice.amountTax}}</td>
+                        </tr>
+                        <tr>
+                            <th>{{phrase.Total}}:</th>
+                            <td>${{invoice.totalWithTax}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+
+        <!-- this row will not appear when printing -->
+        <div class="row no-print">
+            <div class="col-xs-12">
+                <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> {{phrase.Print}}</button>
+            </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.details">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listPaymentDetail}}</h3>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody>
+              <tr ng-repeat="(key, value) in payDetails">
+                  <td>{{key}}</td>
+                  <td>{{value}}</td>
+              </tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<modal visible="showModal"><div ng-bind-html="modalContent"></div></modal>

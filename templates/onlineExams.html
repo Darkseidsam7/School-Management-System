@@ -1,0 +1,404 @@
+<section class="content-header">
+    <h1>
+        {{phrase.onlineExams}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <a ng-if="userRole == 'admin' || userRole == 'teacher'" ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.addExam}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listExams}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.examName}}</th>
+                  <th>{{phrase.examDesc}}</th>
+                  <th>{{phrase.examDeadline}}</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="exam in onlineexams | filter:searchText">
+                  <td>{{exam.id}}</td>
+                  <td>{{exam.examTitle}}</td>
+                  <td>{{exam.examDescription}}</td>
+                  <td>{{exam.ExamEndDate}}</td>
+                  <td>
+                    <a ng-if="userRole == 'student'" ng-click="take(exam.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.takeExam}}" tooltip><i class="fa fa-list-alt"></i></a>
+                    <a ng-if="userRole == 'admin' || userRole == 'teacher'" ng-click="marksData(exam.id)" type="button" class="btn btn-success btn-flat" title="{{phrase.showMarks}}" tooltip><i class="fa fa-check-square-o"></i></a>
+                    <a ng-if="userRole == 'admin' || userRole == 'teacher'" ng-click="edit(exam.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-if="userRole == 'admin' || userRole == 'teacher'" ng-click="remove(exam,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!onlineexams.length"><td class="noTableData" colspan="5">No exams</td></tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addExam}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addExam" role="form" ng-submit="saveAdd()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addExam.examTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.examName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="examTitle" ng-model="form.examTitle" class="form-control" required placeholder="{{phrase.examName}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.examDesc}}</label>
+          <div class="col-sm-10">
+            <textarea name="examDescription" class="form-control" ng-model="form.examDescription" placeholder="{{phrase.examDesc}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addExam.examClass.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.class}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.examClass" name="examClass[]" multiple required>
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addExam.examSubject.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Subject}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.examSubject" required name="examSubject">
+              <option ng-repeat="subjectOne in subject" value="{{subjectOne.id}}">{{subjectOne.subjectTitle}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addExam.examDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.startTime}} *</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="examDate" ng-model="form.examDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addExam.ExamEndDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.endTime}} *</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="ExamEndDate" ng-model="form.ExamEndDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Extras}}</label>
+          <div class="col-sm-10">
+            <input type="checkbox" model="form.ExamShowGrade" value="1" ng-checked="form.ExamShowGrade == '1'"> {{phrase.showExamGradesAfter}}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Questions}}</label>
+          <div class="col-sm-10">
+
+            <div class="box-body table-responsive">
+              <div class="form-group" ng-class="{'has-error': addExam.AssignTitle.$invalid}">
+                <label for="inputEmail3" class="col-sm-1 control-label">{{phrase.Question}}</label>
+                <div class="col-sm-11">
+                  <input type="text" name="examTitle" ng-model="examTitle" class="form-control" placeholder="{{phrase.Question}}">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputEmail3" class="col-sm-1 control-label">{{phrase.Answers}} </label>
+                <div class="col-sm-2">
+                  <input type="text" name="ans1" ng-model="ans1" class="form-control" placeholder="Answer 1">
+                  <input type="radio" name="optionsRadios" value="1" ng-model="Tans"> {{phrase.trueAns}}
+                </div>
+                <div class="col-sm-2">
+                  <input type="text" name="ans2" ng-model="ans2" class="form-control" placeholder="Answer 2">
+                  <input type="radio" name="optionsRadios" value="2" ng-model="Tans"> {{phrase.trueAns}}
+                </div>
+                <div class="col-sm-2">
+                  <input type="text" name="ans3" ng-model="ans3" class="form-control" placeholder="Answer 3">
+                  <input type="radio" name="optionsRadios" value="3" ng-model="Tans"> {{phrase.trueAns}}
+                </div>
+                <div class="col-sm-2">
+                  <input type="text" name="ans4" ng-model="ans4" class="form-control" placeholder="Answer 4">
+                  <input type="radio" name="optionsRadios" value="4" ng-model="Tans"> {{phrase.trueAns}}
+                </div>
+                <a ng-click="addQuestion()" class="col-sm-3 btn btn-danger btn-flat pull-right marginBottom15">{{phrase.addQuestion}}</a>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4" ng-repeat="question in form.examQuestion">
+                <div class="box box-info" >
+                  <div class="box-header">
+                      <h3 class="box-title">{{phrase.infoBox}}</h3>
+                      <div class="box-tools pull-right">
+                        <a href="" ng-click="removeQuestion(question,$index)" class="label bg-aqua">{{phrase.Remove}}</a>
+                      </div>
+                  </div>
+                  <div class="box-body">
+                    <div class="form-group" ng-class="{'has-error': addExam.AssignTitle.$invalid}">
+                      <label class="col-sm-12">{{phrase.Question}}</label>
+                      <div class="col-sm-12"> {{question.title}} </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': addExam.AssignTitle.$invalid}">
+                      <label class="col-sm-12">{{phrase.Answers}} </label>
+                      <div class="col-sm-12">
+                      {{question.ans1}} <span ng-show="question.Tans == '1'"> [{{phrase.trueAns}}]</span><br/>
+                      {{question.ans2}} <span ng-show="question.Tans == '2'"> [{{phrase.trueAns}}]</span><br/>
+                      {{question.ans3}} <span ng-show="question.Tans == '3'"> [{{phrase.trueAns}}]</span><br/>
+                      {{question.ans4}} <span ng-show="question.Tans == '4'"> [{{phrase.trueAns}}]</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addExam.$invalid">{{phrase.addExam}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editExam}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editExam" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': editExam.examTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.examName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="examTitle" ng-model="form.examTitle" class="form-control" required placeholder="{{phrase.examName}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.examDesc}}</label>
+          <div class="col-sm-10">
+            <textarea name="examDescription" class="form-control" ng-model="form.examDescription" placeholder="{{phrase.examDesc}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editExam.examClass.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.class}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.examClass" name="examClass[]" multiple required>
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editExam.examSubject.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Subject}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.examSubject" required name="examSubject">
+              <option ng-repeat="subjectOne in subject" value="{{subjectOne.id}}">{{subjectOne.subjectTitle}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editExam.examDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.startTime}}</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="examDate" ng-model="form.examDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editExam.ExamEndDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.endTime}}</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="ExamEndDate" ng-model="form.ExamEndDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Extras}}</label>
+          <div class="col-sm-10">
+            <input type="checkbox" model="form.ExamShowGrade" value="1" ng-checked="form.ExamShowGrade == '1'"> {{phrase.showExamGradesAfter}}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Questions}}</label>
+          <div class="col-sm-10">
+
+            <div class="box-body table-responsive">
+              <div class="form-group" ng-class="{'has-error': addExam.AssignTitle.$invalid}">
+                <label for="inputEmail3" class="col-sm-1 control-label">{{phrase.Question}}</label>
+                <div class="col-sm-11">
+                  <input type="text" name="examTitle" ng-model="examTitle" class="form-control" placeholder="{{phrase.Question}}">
+                </div>
+              </div>
+              <div class="form-group" ng-class="{'has-error': addExam.AssignTitle.$invalid}">
+                <label for="inputEmail3" class="col-sm-1 control-label">{{phrase.Answers}} </label>
+                <div class="col-sm-2">
+                  <input type="text" name="ans1" ng-model="ans1" class="form-control" placeholder="Answer 1">
+                  <input type="radio" name="optionsRadios" value="1" ng-model="Tans"> {{phrase.trueAns}}
+                </div>
+                <div class="col-sm-2">
+                  <input type="text" name="ans2" ng-model="ans2" class="form-control" placeholder="Answer 2">
+                  <input type="radio" name="optionsRadios" value="2" ng-model="Tans"> {{phrase.trueAns}}
+                </div>
+                <div class="col-sm-2">
+                  <input type="text" name="ans3" ng-model="ans3" class="form-control" placeholder="Answer 3">
+                  <input type="radio" name="optionsRadios" value="3" ng-model="Tans"> {{phrase.trueAns}}
+                </div>
+                <div class="col-sm-2">
+                  <input type="text" name="ans4" ng-model="ans4" class="form-control" placeholder="Answer 4">
+                  <input type="radio" name="optionsRadios" value="4" ng-model="Tans"> {{phrase.trueAns}}
+                </div>
+                <a ng-click="addQuestion()" class="col-sm-3 btn btn-danger btn-flat pull-right marginBottom15">{{phrase.addQuestion}}</a>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4" ng-repeat="question in form.examQuestion">
+                <div class="box box-info" >
+                  <div class="box-header">
+                      <h3 class="box-title">{{phrase.infoBox}}</h3>
+                      <div class="box-tools pull-right">
+                        <a href="" ng-click="removeQuestion(question,$index)" class="label bg-aqua">{{phrase.Remove}}</a>
+                      </div>
+                  </div>
+                  <div class="box-body">
+                    <div class="form-group" ng-class="{'has-error': addExam.AssignTitle.$invalid}">
+                      <label class="col-sm-12">{{phrase.Question}}</label>
+                      <div class="col-sm-12"> {{question.title}} </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': addExam.AssignTitle.$invalid}">
+                      <label class="col-sm-12">{{phrase.Answers}} </label>
+                      <div class="col-sm-12">
+                      {{question.ans1}} <span ng-show="question.Tans == '1'"> [{{phrase.trueAns}}]</span><br/>
+                      {{question.ans2}} <span ng-show="question.Tans == '2'"> [{{phrase.trueAns}}]</span><br/>
+                      {{question.ans3}} <span ng-show="question.Tans == '3'"> [{{phrase.trueAns}}]</span><br/>
+                      {{question.ans4}} <span ng-show="question.Tans == '4'"> [{{phrase.trueAns}}]</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editExam.$invalid">{{phrase.editExam}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<section class="content" ng-show="views.take">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.takeExam}} : {{takeData.examTitle}} [{{takeData.examDescription}}]</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="takeQuestions" role="form" ng-submit="submitExam()" novalidate>
+        
+        <div class="row">
+          <div class="col-md-12" ng-repeat="question in takeData.examQuestion">
+            <div class="box box-info" >
+              <div class="box-header">
+                  <h3 class="box-title">{{question.title}}</h3>
+              </div>
+              <div class="box-body">
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <div class="radio">
+                      <label>
+                        <input type="radio" ng-model="question.answer" value="1"> {{question.ans1}}
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" ng-model="question.answer" value="2"> {{question.ans2}}
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" ng-model="question.answer" value="3"> {{question.ans3}}
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" ng-model="question.answer" value="4"> {{question.ans4}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+              
+          
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="takeQuestions.$invalid">{{phrase.submitAnswers}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<section class="content" ng-show="views.marks">
+  <a ng-click="changeView('list')" class="btn btn-success btn-flat pull-right marginBottom15">{{phrase.Return}}</a>
+  <div class="btn-group pull-right">
+      <button type="button" class="btn btn-success btn-flat">{{phrase.Export}}</button>
+      <button type="button" class="btn btn-success btn-flat dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+          <span class="sr-only">{{phrase.toggleDropdown}}</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+          <li><a href="onlineExams/export/{{marksExam}}/excel">{{phrase.ExportExcel}}</a></li>
+          <li><a href="onlineExams/export/{{marksExam}}/pdf" target="_BLANK">{{phrase.ExportPDF}}</a></li>
+      </ul>
+  </div>
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listMarks}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.studentName}}</th>
+                  <th>{{phrase.Grade}}</th>
+                  <th>{{phrase.Date}}</th>
+              </tr>
+              <tr ng-repeat="mark in marks | filter:searchText">
+                  <td><a href="" ng-click="studentProfile( mark.studentId )">{{mark.fullName}}</a></td>
+                  <td>{{mark.examGrade}}</td>
+                  <td>{{mark.examDate * 1000 | date}}</td>
+              </tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<modal visible="showModal"><div ng-bind-html="modalContent"></div></modal>

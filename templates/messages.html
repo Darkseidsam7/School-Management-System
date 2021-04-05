@@ -1,0 +1,128 @@
+<section class="content-header">
+    <h1>
+        {{phrase.Messages}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <div class="mailbox row">
+      <div class="col-xs-12">
+          <div class="box box-solid">
+              <div class="box-body">
+                  <div class="row">
+                      <div class="col-md-12 col-sm-12">
+                          <div class="row pad">
+                              <div class="col-sm-6">
+                                  <label style="margin-right: 10px;">
+                                      <input type="checkbox" ng-model="selectedAll" ng-change="checkAll()"/>
+                                  </label>
+                                  <div class="btn-group">
+                                      <button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
+                                          Action <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu" role="menu">
+                                          <li><a href="" ng-click="markRead()">{{phrase.markRead}}</a></li>
+                                          <li><a href="" ng-click="markUnRead()">{{phrase.markUnread}}</a></li>
+                                          <li class="divider"></li>
+                                          <li><a href=""  ng-click="markDelete()">{{phrase.Remove}}</a></li>
+                                      </ul>
+                                  </div>
+                                  <div class="btn-group"><a ng-click="changeView('create')" class="btn btn-sm btn-flat btn-primary"><i class="fa fa-pencil"></i>{{phrase.composeMessage}} </a></div>
+                              </div>
+                              <div class="col-sm-6 search-form">
+                              		
+                                  <form action="" class="text-right">
+                                      <div class="input-group pull-right floatRTL">
+                                      		<input type="text" ng-model="searchText" class="form-control input-sm" placeholder="{{phrase.Search}}">
+                                      </div>
+                                  </form>
+                              </div>
+                          </div>
+
+                          <div class="table-responsive">
+                              <table class="table table-mailbox">
+                                  <tr ng-class="{'unread': message.messageStatus == '1'}" "message.messageStatus" dir-paginate="message in messages | filter:searchText | itemsPerPage:20" total-items="totalItems">
+                                      <td class="small-col"><input name="checked[]" ng-model="message.selected" type="checkbox" /></td>
+                                      <td class="name"><a href ng-click="showMessage(message.id)">{{message.fullName}}</a></td>
+                                      <td class="subject"><a href ng-click="showMessage(message.id)">{{message.lastMessage}}</a></td>
+                                      <td class="time">{{message.lastMessageDate * 1000 | date:'medium'}}</td>
+                                  </tr>
+                                  <tr ng-show="!messages.length"><td class="noTableData" colspan="4">{{phrase.noMessages}}</td></tr>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="box-footer clearfix">
+                  <div class="pull-right">
+                      <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.read">
+	<a ng-click="changeView('list')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.Return}}</a> 
+	<div class="clearfix"></div>
+	<div class="box box-success">
+    <div class="box-header">
+        <i class="fa fa-comments-o"></i>
+        <h3 class="box-title">{{messageDet.fullName}}</h3>
+    </div>
+    <div class="box-body chat" id="chat-box" chat-box>
+        <p id="loadOld" class="text-muted well well-sm no-shadow text-center" ng-click="loadOld()">{{phrase.loadOldMessages}}</p>
+        <div class="item messageItem" ng-repeat="messageOne in message">
+            <img ng-if="messageOne.photo == ''" ng-src="uploads/profile/user.png" alt="{{messageOne.fullname}}"/>
+            <img ng-if="messageOne.photo != ''" ng-src="{{'uploads/profile/'+messageOne.photo}}" alt="{{messageOne.fullname}}"/>
+            <p class="message">
+                <a href="" class="name">
+                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> {{messageOne.dateSent * 1000 | date:'medium'}}</small>
+                    {{messageOne.fullName}}
+                </a>
+               {{messageOne.messageText}}
+            </p>
+        </div>
+    </div>
+    <div class="box-footer">
+        <div class="input-group">
+            <input class="form-control" ng-enter="replyMessage()" ng-disabled="form.disable" ng-model="form.reply" placeholder="{{phrase.typeReply}}">
+            <div class="input-group-btn">
+                <button class="btn btn-success" ng-click="replyMessage()"><i class="fa fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.create">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}e</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.sendMessage}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="sendMessage" role="form" ng-submit="sendMessageNow()" novalidate>
+        <div class="form-group" ng-class="{'has-error': sendMessage.toId.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.sendMessageTo}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="toId" ng-model="form.toId" class="form-control" required placeholder="{{phrase.sendMessageTo}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': sendMessage.messageText.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.message}} *</label>
+          <div class="col-sm-10">
+            <textarea name="messageText" class="form-control" ng-model="form.messageText" placeholder="{{phrase.message}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="sendMessage.$invalid">{{phrase.sendMessage}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

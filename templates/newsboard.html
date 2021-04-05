@@ -1,0 +1,155 @@
+<section class="content-header">
+    <h1>
+        {{phrase.newsboard}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <a ng-if="userRole == 'admin'" ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.addNews}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listNews}}</h3>
+          <div class="box-tools">
+              <div class="input-group pull-right">
+                  <select class="form-control input-sm pull-right" ng-model="searchText.newsFor" style="width:150px;" >
+                    <option value="">{{phrase.all}}</option>
+                    <option value="teacher">{{phrase.teacher}}</option>
+                    <option value="student">{{phrase.students}}</option>
+                    <option value="parent">{{phrase.parents}}</option>
+                  </select> 
+                  <input type="text" name="table_search" ng-model="searchText.text" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.newsTitle}}</th>
+                  <th>{{phrase.newsContent}}</th>
+                  <th>{{phrase.for}}</th>
+                  <th style="width:100px;" ng-if="userRole == 'admin'">{{phrase.Operations}}</th>
+              </tr>
+              <tr dir-paginate="news in newsboard | filter:searchText.text | filter:{newsFor:searchText.newsFor} | itemsPerPage:20" total-items="totalItems">
+                  <td>{{news.id}}</td>
+                  <td>{{news.newsTitle}}</td>
+                  <td>{{news.newsText}}</td>
+                  <td>{{news.newsFor}}</td>
+                  <td ng-if="userRole == 'admin'">
+                    <a ng-if="userRole == 'admin'" ng-click="edit(news.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="remove(news,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!newsboard.length"><td class="noTableData" colspan="5">{{phrase.noNews}}</td></tr>
+          </tbody></table>
+          <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+<a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addNews}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addDorm" role="form" ng-submit="saveAdd()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addDorm.newsTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.newsTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="newsTitle" ng-model="form.newsTitle" class="form-control" required placeholder="{{phrase.newsTitle}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.newsText.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.newsContent}} *</label>
+          <div class="col-sm-10">
+            <textarea ck-editor name="newsText" class="form-control" required ng-model="form.newsText" placeholder="{{phrase.newsContent}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.newsFor.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.for}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.newsFor" name="newsFor" required>
+              <option value="all">{{phrase.all}}</option>
+              <option value="teacher">{{phrase.teachers}}</option>
+              <option value="student">{{phrase.students}}</option>
+              <option value="parent">{{phrase.parents}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"  ng-class="{'has-error': addDorm.newsDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}} *</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="newsDate" ng-model="form.newsDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addDorm.$invalid">{{phrase.addNews}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editNews}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editDorm" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': editDorm.newsTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.newsTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="newsTitle" ng-model="form.newsTitle" class="form-control" required placeholder="{{phrase.newsTitle}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editDorm.newsText.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.newsContent}} *</label>
+          <div class="col-sm-10">
+            <textarea ck-editor name="newsText" class="form-control" ng-model="form.newsText" placeholder="{{phrase.newsContent}}" required></textarea>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editDorm.newsFor.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.for}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.newsFor" name="newsFor" required>
+              <option value="all">{{phrase.all}}</option>
+              <option value="teacher">{{phrase.teachers}}</option>
+              <option value="student">{{phrase.students}}</option>
+              <option value="parent">{{phrase.parents}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editDorm.newsDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}} *</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="newsDate" ng-model="form.newsDate" class="form-control datemask" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editDorm.$invalid">{{phrase.editNews}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content rtlPage" ng-show="views.read">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{form.newsTitle}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <div ng-bind-html="form.newsText"></div>
+    </div>
+  </div>
+</section>

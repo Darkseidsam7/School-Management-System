@@ -1,0 +1,4 @@
+\app\config\database.php
+update here your database userid and password respected to your server database credentials
+
+database\dbschool.sql import this file in your phpmyadmin

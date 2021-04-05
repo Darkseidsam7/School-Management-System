@@ -1,0 +1,125 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.Subjects}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <a ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.addSubject}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.Subjects}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.subjectName}}</th>
+                  <th>{{phrase.class}}</th>
+                  <th>{{phrase.teacher}}</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="subject in subjects | filter:searchText">
+                  <td>{{subject.id}}</td>
+                  <td>{{subject.subjectTitle}}</td>
+                  <td>{{subject.className}}</td>
+                  <td>{{subject.teacherName}}</td>
+                  <td>
+                    <a ng-click="edit(subject.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-click="remove(subject,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!subjects.length"><td class="noTableData" colspan="5">{{phrase.noSubjects}}</td></tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+<a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addSubject}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addDorm" role="form" ng-submit="saveAdd()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addDorm.subjectTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.subjectName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="subjectTitle" ng-model="form.subjectTitle" class="form-control" required placeholder="{{phrase.subjectName}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.teacherId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.teacher}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.teacherId" name="teacherId" required>
+              <option ng-repeat="teacher in teachers" value="{{teacher.id}}">{{teacher.fullName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.classId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.class}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.classId" name="classId" required>
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addDorm.$invalid">{{phrase.addSubject}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editSubject}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editDorm" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addDorm.subjectTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.subjectName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="subjectTitle" ng-model="form.subjectTitle" class="form-control" required placeholder="{{phrase.subjectName}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.teacherId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.teacher}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.teacherId" name="teacherId" required>
+              <option ng-repeat="teacher in teachers" value="{{teacher.id}}">{{teacher.fullName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.classId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.class}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.classId" name="classId" required>
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editDorm.$invalid">{{phrase.editSubject}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

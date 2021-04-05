@@ -1,0 +1,193 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.examsList}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <a ng-if="userRole == 'admin'" ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.addExam}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listExams}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.examName}}</th>
+                  <th>{{phrase.examDesc}}</th>
+                  <th>{{phrase.Date}}</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="exam in examsList | filter:searchText">
+                  <td>{{exam.id}}</td>
+                  <td>{{exam.examTitle}}</td>
+                  <td>{{exam.examDescription}}</td>
+                  <td>{{exam.examDate}}</td>
+                  <td>
+                    <a ng-if="userRole == 'admin' || userRole == 'teacher'" ng-click="marks(exam.id)" type="button" class="btn btn-success btn-flat" title="{{phrase.showMarks}}" tooltip><i class="fa fa-check-square-o"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="notify(exam.id)" type="button" class="btn btn-success btn-flat" title="{{phrase.sendExamMarks}}" tooltip><i class="fa fa fa-warning"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="edit(exam.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="remove(exam,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!examsList.length"><td class="noTableData" colspan="5">{{phrase.noExams}}</td></tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addExam}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addExam" role="form" ng-submit="saveAdd()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addExam.examTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.examName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="examTitle" ng-model="form.examTitle" class="form-control" required placeholder="{{phrase.examName}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.examDesc}}</label>
+          <div class="col-sm-10">
+            <textarea name="examDescription" class="form-control" ng-model="form.examDescription" placeholder="{{phrase.examDesc}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addExam.examDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}} *</label>
+          <div class="col-sm-10">
+            <input type="text" name="examDate" ng-model="form.examDate" class="form-control datemask" required>
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addExam.$invalid">{{phrase.addExam}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editExam}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editExam" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': editExam.examTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.examName}} *</label>
+          <div class="col-sm-10">
+            <input type="text" name="examTitle" ng-model="form.examTitle" class="form-control" required placeholder="{{phrase.examName}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.examDesc}}</label>
+          <div class="col-sm-10">
+            <textarea name="examDescription" class="form-control" ng-model="form.examDescription" placeholder="{{phrase.examDesc}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editExam.examDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}} *</label>
+          <div class="col-sm-10">
+            <input type="text" name="examDate" ng-model="form.examDate" class="form-control datemask" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editExam.$invalid">{{phrase.editExam}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.premarks">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.selClassSubExam}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="selectcs" role="form" ng-submit="startAddMarks()" novalidate>
+        <div class="form-group" ng-class="{'has-error': selectcs.classId.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.class}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.classId" required name="classId">
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': selectcs.subjectId.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.Subject}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.subjectId" required name="subjectId">
+              <option ng-repeat="subject in subjects" value="{{subject.id}}">{{subject.subjectTitle}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="selectcs.$invalid">{{phrase.addMarks}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.marks">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <a href="javascript:window.print()" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.Print}}</a>
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.controlMarksExam}} :{{form.respExam.examTitle}}, {{phrase.class}} : {{form.respClass.className}}, {{phrase.Subject}} : {{form.respSubject.subjectTitle}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" ng-submit="saveNewMarks()" name="form" novalidate>
+        <table class="table table-bordered">
+            <tbody><tr>
+                <th style="width: 10px">#</th>
+                <th>{{phrase.studentName}}</th>
+                <th>{{phrase.attendanceMakrs}}</th>
+                <th>{{phrase.examMarks}}</th>
+                <th>{{phrase.Comments}}</th>
+            </tr>
+            <tr ng-repeat="mark in form.respStudents | object2Array | orderBy:'studentRollId'">
+                <td>{{mark.studentRollId}}</td>
+                <td><a href="" ng-click="studentProfile( mark.id )">{{mark.name}}</a></td>
+                <td> <input type="text" ng-model="mark.attendanceMark"> </td>
+                <td> <input type="text" ng-model="mark.examMark"> </td>
+                <td> <input type="text" ng-model="mark.markComments"> </td>
+            </tr>
+          </tbody>
+        </table>
+        <br/>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">{{phrase.addUpdateMarks}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<modal visible="showModal"><div ng-bind-html="modalContent"></div></modal>

@@ -1,0 +1,92 @@
+body > .header .logo{
+	float: right;
+}
+body > .header .navbar{
+	margin-right: 220px;
+	margin-left: 0;
+}
+body > .header .navbar .sidebar-toggle{
+	float: right;
+}
+.navbar-right{
+	float:left !important;
+}
+.navbar-nav > li{
+	float: right;
+}
+.right-side{
+	margin-right:220px;
+	margin-left:0px;
+}
+.left-side{
+	right: 0;
+}
+.overlay{
+	margin-left:0px;
+	margin-right:220px;
+}
+.loading-img{
+	margin-left:0px;
+	margin-right:220px;
+}
+.content-header h1{
+	text-align: right;
+}
+table{
+	direction: rtl;
+	text-align: right !important;
+}
+th{
+	text-align: right !important;
+}
+.box-header h3{
+	float: right !important;
+}
+.box-header .box-tools{
+	float: left;
+}
+.nav-tabs > li{
+	float: right;
+}
+.col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12{
+	float: right;
+	direction: rtl;
+}
+input[type="checkbox"]{
+	margin-right: 5px !important;
+	margin-left: 0 !important;
+}
+input[type="radio"]{
+	margin-right: -20px !important;
+	margin-left: 0 !important;
+}
+.sidebar .sidebar-menu > li > a{
+	text-align: right;
+	direction: rtl;
+}
+.leftMenuExpand{
+	margin-left: 0px !important;
+	margin-right: 0.3em !important;
+	float: left !important;
+}
+.sidebar .sidebar-menu > li > a{
+	padding: 12px 15px 12px 5px;
+}
+.footerCopyRight{
+	float:left !important;
+	direction: rtl;
+}
+.floatRTL{
+	float:left !important;
+}
+.sidebar .sidebar-menu .treeview-menu > li > a{
+	direction: rtl;
+	text-align: right;
+	padding: 5px 15px 5px 5px;
+}
+.gritter-with-image, .gritter-without-image{
+	direction: rtl;
+}
+.rtlPage{
+	direction: rtl;
+}

@@ -1,0 +1,436 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.students}}
+    </h1>
+</section>
+
+<section class="content" ng-show="views.list">
+   <a ng-if="userRole == 'admin'" ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15 no-print">{{phrase.addStudent}}</a>
+   <a ng-if="userRole == 'admin'" ng-click="waitingApproval()" class="floatRTL btn btn-success btn-flat pull-right marginBottom15 no-print">{{phrase.waitingApproval}}</a>  
+   <div ng-if="userRole == 'admin'" class="btn-group pull-right no-print">
+      <button type="button" class="btn btn-success btn-flat">{{phrase.Export}}</button>
+      <button type="button" class="btn btn-success btn-flat dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+          <span class="sr-only">{{phrase.toggleDropdown}}</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+          <li><a href="students/export">{{phrase.ExportExcel}}</a></li>
+          <li><a href="students/exportpdf" target="_BLANK">{{phrase.ExportPDF}}</a></li>
+          <li><a href="students/exportcsv" target="_BLANK">{{phrase.ExportCSV}}</a></li>
+      </ul>
+  </div> 
+  <div ng-if="userRole == 'admin'" class="btn-group pull-right no-print">
+      <button type="button" class="btn btn-success btn-flat">{{phrase.Import}}</button>
+      <button type="button" class="btn btn-success btn-flat dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+          <span class="sr-only">{{phrase.toggleDropdown}}</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+          <li><a ng-click="import('excel')">{{phrase.ImportExcel}}</a></li>
+          <li><a ng-click="import('csv')">{{phrase.ImportCSV}}</a></li>
+      </ul>
+  </div> 
+  <a ng-if="userRole == 'admin'" href="javascript:window.print()" class="btn btn-success btn-flat pull-right marginBottom15 no-print">{{phrase.Print}}</a>
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listStudents}}</h3>
+          <div class="box-tools">
+              <div class="input-group pull-right">
+                  <select class="form-control input-sm pull-right" ng-model="searchText.studentClass" style="width:150px;" >
+                    <option value="">{{phrase.all}}</option>
+                    <option ng-repeat="class in classes" value="{{class.className}}">{{class.className}}</option>
+                  </select> 
+                  <input type="text" name="table_search.text" ng-model="searchText.text" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}"> 
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.FullName}}</th>
+                  <th>{{phrase.username}}</th>
+                  <th>{{phrase.email}}</th>
+                  <th>{{phrase.class}}</th>
+                  <th class='no-print'>{{phrase.Operations}}</th>
+              </tr>
+              <tr dir-paginate="student in students | filter:{studentClass:searchText.studentClass} | filter:searchText.text | itemsPerPage:20" total-items="totalItems">
+                  <td>{{student.studentRollId}}</td>
+                  <td><a href="" ng-click="studentProfile( student.id )">{{student.fullName}}</a> </td>
+                  <td>{{student.username}}</td>
+                  <td>{{student.email}}</td>
+                  <td>{{student.studentClass}}</td>
+                  <td class='no-print'>
+                    <a ng-click="attendance(student.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Attendance}}" tooltip><i class="fa fa-eye"></i></a>
+                    <a ng-click="marksheet(student.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Marksheet}}" tooltip><i class="fa fa-table"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="leaderBoard(student.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.leaderboard}}" tooltip><i class="fa fa-trophy"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="edit(student.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="remove(student,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!students.length"><td class="noTableData" colspan="6">{{phrase.noStudents}}</td></tr>
+          </tbody></table>
+          <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.marksheet">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.Return}}</a>
+  <div class="box col-xs-12" ng-repeat="exam in studentMarksheet">
+      <div class="box-header">
+          <h3 class="box-title">{{exam.title}}</h3>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.Subject}}</th>
+                  <th>{{phrase.mark}}</th>
+                  <th>{{phrase.attendanceMakrs}}</th>
+                  <th>{{phrase.Grade}}</th>
+                  <th>{{phrase.Comments}}</th>
+              </tr>
+              <tr ng-repeat="dataOne in exam.data">
+                  <td>{{dataOne.subjectName}}</td>
+                  <td>{{dataOne.examMark}}</td>
+                  <td>{{dataOne.attendanceMark}}</td>
+                  <td>{{dataOne.grade}}</td>
+                  <td>{{dataOne.markComments}}</td>
+              </tr>
+          </tbody></table>
+          <a class="btn btn-success btn-flat pull-right marginBottom15">{{phrase.examMarks}} : {{exam.totalMarks}}</a>
+          <a class="btn btn-success btn-flat pull-right marginBottom15">{{phrase.AveragePoints}} : {{exam.pointsAvg}}</a>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.approval">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.Return}}</a>   
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.waitingApproval}}</h3>
+          <div class="box-tools">
+              <div class="input-group pull-right">
+                  <select class="form-control input-sm pull-right" ng-model="searchText.studentClass" style="width:150px;" >
+                    <option value="">{{phrase.all}}</option>
+                    <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+                  </select> 
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}"> 
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.FullName}}</th>
+                  <th>{{phrase.username}}</th>
+                  <th>{{phrase.email}}</th>
+                  <th>{{phrase.class}}</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="student in studentsApproval | filter:searchText">
+                  <td>{{student.studentRollId}}</td>
+                  <td><a href="" ng-click="studentProfile( student.id )">{{student.fullName}}</a></td>
+                  <td>{{student.username}}</td>
+                  <td>{{student.email}}</td>
+                  <td>{{student.studentClass}}</td>
+                  <td>
+                    <a ng-click="approve(student.id)" type="button" class="btn btn-success btn-flat" title="{{phrase.Approve}}" tooltip><i class="fa fa-check-square-o"></i></a>
+                    <a ng-click="edit(student.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-click="remove(student,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addStudent}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" ng-upload="saveAdd(content)" method="post" action="students" name="addAdmin" role="form" novalidate>
+        <div class="form-group" ng-class="{'has-error': addAdmin.fullName.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.FullName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="fullName" ng-model="form.fullName" class="form-control" required placeholder="{{phrase.FullName}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.rollid}} </label>
+          <div class="col-sm-10">
+            <input type="text" name="studentRollId" ng-model="form.studentRollId" class="form-control" placeholder="{{phrase.rollid}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addAdmin.username.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.username}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="username" ng-model="form.username" class="form-control" required placeholder="{{phrase.username}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addAdmin.email.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.email}} *</label>
+          <div class="col-sm-10">
+            <input type="email" name="email" ng-model="form.email" class="form-control" placeholder="{{phrase.email}}" required>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addAdmin.password.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.password}} *</label>
+          <div class="col-sm-10">
+            <input type="password" name="password" ng-model="form.password" class="form-control" required placeholder="{{phrase.password}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Gender}}</label>
+          <div class="col-sm-10">
+            
+            <div class="radio">
+                <label>
+                    <input type="radio" name="gender" value="male" ng-model="form.gender" checked="checked">
+                    {{phrase.Male}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="gender" value="female" ng-model="form.gender">
+                    {{phrase.Female}}
+                </label>
+            </div>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Birthday}}</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="birthday" ng-model="form.birthday" class="form-control datemask">
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Address}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="address" class="form-control" ng-model="form.address" placeholder="{{phrase.Address}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.phoneNo}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="phoneNo" class="form-control" ng-model="form.phoneNo" placeholder="{{phrase.phoneNo}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.mobileNo}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="mobileNo" class="form-control" ng-model="form.mobileNo" placeholder="{{phrase.mobileNo}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.class}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="studentClass" ng-model="form.studentClass" >
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select> 
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Transportation}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="transport" ng-model="form.transport" >
+              <option ng-repeat="transport in transports" value="{{transport.id}}">{{transport.transportTitle}}</option>
+            </select> 
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Photo}}</label>
+          <div class="col-sm-10">
+            <input type="file" name="photo">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="_token" value="{{CSRF_TOKEN}}">
+            <button type="submit" class="btn btn-default" ng-disabled="addAdmin.$invalid || $isUploading">{{phrase.addStudent}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editStudent}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editDorm" role="form" ng-upload="saveEdit(content)" method="post" action="{{'students/'+form.id}}" novalidate>
+        <div class="form-group" ng-class="{'has-error': addAdmin.fullName.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.FullName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="fullName" ng-model="form.fullName" class="form-control" required placeholder="{{phrase.FullName}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.rollid}} </label>
+          <div class="col-sm-10">
+            <input type="text" name="studentRollId" ng-model="form.studentRollId" class="form-control" placeholder="{{phrase.rollid}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addAdmin.username.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.username}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="username" ng-model="form.username" class="form-control" required placeholder="{{phrase.username}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addAdmin.email.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.email}} *</label>
+          <div class="col-sm-10">
+            <input type="email" name="email" ng-model="form.email" class="form-control" placeholder="{{phrase.email}}" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.password}} *</label>
+          <div class="col-sm-10">
+            <input type="password" name="password" ng-model="form.password" class="form-control" placeholder="{{phrase.password}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Gender}}</label>
+          <div class="col-sm-10">
+            
+            <div class="radio">
+                <label>
+                    <input type="radio" name="gender" value="male" ng-model="form.gender" checked="checked">
+                    {{phrase.Male}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="gender" value="female" ng-model="form.gender">
+                    {{phrase.Female}}
+                </label>
+            </div>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Birthday}}</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="birthday" ng-model="form.birthday" class="form-control datemask">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Address}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="address" class="form-control" ng-model="form.address" placeholder="{{phrase.Address}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.phoneNo}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="phoneNo" class="form-control" ng-model="form.phoneNo" placeholder="{{phrase.phoneNo}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.mobileNo}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="mobileNo" class="form-control" ng-model="form.mobileNo" placeholder="{{phrase.mobileNo}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.class}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="studentClass" ng-model="form.studentClass" >
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select> 
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Transportation}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="transport" ng-model="form.transport" >
+              <option ng-repeat="transport in transports" value="{{transport.id}}">{{transport.transportTitle}}</option>
+            </select> 
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Photo}}</label>
+          <div class="col-sm-10">
+            <input type="file" name="photo">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="_token" value="{{CSRF_TOKEN}}">
+            <button type="submit" class="btn btn-default" ng-disabled="editDorm.$invalid || $isUploading">{{phrase.editStudent}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.attendance">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.Return}}</a>
+
+  <div class="box col-xs-12">
+    <div class="box-header">
+      <h3 class="box-title">{{phrase.attendanceStats}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <table class="table table-bordered">
+          <tbody><tr>
+              <th>{{phrase.Date}}</th>
+              <th ng-show="studentAttendance.attendanceModel=='subject'">{{phrase.Subject}}</th>
+              <th>{{phrase.Attendance}}</th>
+          </tr>
+          <tr ng-repeat="(key,value) in studentAttendance.attendance">
+              <td>{{value.date}}</td>
+              <td ng-show="studentAttendance.attendanceModel=='subject'">{{studentAttendance.subjects[value.subjectId]}}</td>
+              <td>
+                <div>
+                  <span ng-show="value.status =='0'">{{phrase.Absent}}</span>
+                  <span ng-show="value.status =='1'">{{phrase.Present}}</span>
+                  <span ng-show="value.status =='2'">{{phrase.Late}}</span>
+                  <span ng-show="value.status =='3'">{{phrase.LateExecuse}}</span>
+                  <span ng-show="value.status =='4'">{{phrase.earlyDismissal}}</span>
+                </div>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.import">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.Import}} {{importType}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" ng-upload="saveImported(content)" method="post" action="{{'students/import/'+importType}}" name="importData" role="form" novalidate>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.fileToImport}}</label>
+          <div class="col-sm-10">
+            <input type="file" name="excelcsv">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="_token" value="{{CSRF_TOKEN}}">
+            <button type="submit" class="btn btn-default" ng-disabled="importData.$invalid || $isUploading">{{phrase.Import}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<modal visible="showModal"><div ng-bind-html="modalContent"></div></modal>

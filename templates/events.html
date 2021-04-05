@@ -1,0 +1,205 @@
+   <section class="content-header">
+    <h1>
+        {{phrase.events}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <a ng-if="userRole == 'admin'" ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">Add new event</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listEvents}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.eventNamePlace}}</th>
+                  <th>{{phrase.eventDescription}}</th>
+                  <th>{{phrase.for}}</th>
+                  <th>{{phrase.Date}}</th>
+                  <th style="width:100px;" ng-if="userRole == 'admin'">{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="event in events | filter:searchText">
+                  <td>{{event.id}}</td>
+                  <td>{{event.eventTitle}} / {{event.enentPlace}}</td>
+                  <td>{{event.eventDescription}}</td>
+                  <th>{{event.eventFor}}</th>
+                  <td>{{event.eventDate}}</td>
+                  <td ng-if="userRole == 'admin'">
+                    <a ng-if="userRole == 'admin'" ng-click="edit(event.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="remove(event,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!events.length"><td class="noTableData" colspan="5">{{phrase.noEvents}}</td></tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addEvent}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addEvent" role="form" ng-submit="saveAdd()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addEvent.eventTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.eventTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="eventTitle" ng-model="form.eventTitle" class="form-control" required placeholder="{{phrase.eventTitle}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.eventDescription}}</label>
+          <div class="col-sm-10">
+            <textarea ck-editor name="eventDescription" class="form-control" ng-model="form.eventDescription" placeholder="{{phrase.eventDescription}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.eventPlace}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="enentPlace" ng-model="form.enentPlace" class="form-control" placeholder="{{phrase.eventPlace}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addEvent.eventFor.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.for}} *</label>
+          <div class="col-sm-10">
+            
+            <div class="radio">
+                <label>
+                    <input type="radio" name="eventFor" value="all" ng-model="form.eventFor" checked="checked" required>
+                    {{phrase.all}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="eventFor" value="student" ng-model="form.eventFor" required>
+                    {{phrase.students}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="eventFor" value="teacher" ng-model="form.eventFor" required>
+                    {{phrase.teachers}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="eventFor" value="parent" ng-model="form.eventFor" required>
+                    {{phrase.parents}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addEvent.eventDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}} *</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="eventDate" ng-model="form.eventDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addEvent.$invalid">{{phrase.addEvent}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editEvent}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editEvent" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addEvent.eventTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.eventTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="eventTitle" ng-model="form.eventTitle" class="form-control" required placeholder="{{phrase.eventTitle}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.eventDescription}}</label>
+          <div class="col-sm-10">
+            <textarea ck-editor name="eventDescription" class="form-control" ng-model="form.eventDescription" placeholder="{{phrase.eventDescription}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.eventPlace}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="enentPlace" ng-model="form.enentPlace" class="form-control" placeholder="{{phrase.eventPlace}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addEvent.eventFor.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.for}} *</label>
+          <div class="col-sm-10">
+            
+            <div class="radio">
+                <label>
+                    <input type="radio" name="eventFor" value="all" ng-model="form.eventFor" checked="checked" required>
+                    {{phrase.all}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="eventFor" value="student" ng-model="form.eventFor" required>
+                    {{phrase.students}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="eventFor" value="teacher" ng-model="form.eventFor" required>
+                    {{phrase.teachers}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="eventFor" value="parent" ng-model="form.eventFor" required>
+                    {{phrase.parents}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addEvent.eventDate.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}} *</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="eventDate" ng-model="form.eventDate" required class="form-control datemask">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editEvent.$invalid">{{phrase.editEvent}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content rtlPage" ng-show="views.read">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{form.eventTitle}} - {{form.eventDate}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <div ng-bind-html="form.eventDescription"></div>
+      <br/>
+      {{phrase.eventPlace}} : {{form.enentPlace}}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,201 @@
+<section class="content-header">
+    <h1>
+        {{phrase.adminTasks}}
+    </h1>
+</section>
+
+<section class="content" ng-show="views.settings">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.generalSettings}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editSettings" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': editSettings.siteTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.siteTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="siteTitle" ng-model="form.siteTitle" class="form-control" required placeholder="{{phrase.siteTitle}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editSettings.languageDef.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.defLang}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.languageDef" name="languageDef" required>
+              <option ng-repeat="(key,value) in languages" value="{{key}}">{{value}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.allowLanguage}}</label>
+          <div class="col-sm-10">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="languageAllow" value="1" ng-model="form.languageAllow" required ng-checked='true'>
+                    {{phrase.allowed}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="languageAllow" value="0" ng-model="form.languageAllow" required >
+                    {{phrase.notAllowed}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Address}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="address" ng-model="form.address" class="form-control" placeholder="{{phrase.Address}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Address2}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="address2" ng-model="form.address2" class="form-control" placeholder="{{phrase.Address2}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.phoneNo}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="phoneNo" ng-model="form.phoneNo" class="form-control" placeholder="{{phrase.phoneNo}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editSettings.systemEmail.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.sysMail}} *</label>
+          <div class="col-sm-10">
+            <input type="text" name="systemEmail" ng-model="form.systemEmail" class="form-control" required placeholder="{{phrase.sysMail}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.paymentMail}} *</label>
+          <div class="col-sm-10">
+            <input type="text" name="paypalPayment" ng-model="form.paypalPayment" class="form-control" placeholder="{{phrase.paymentMail}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editSettings.paymentTax.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.payTax}} % *</label>
+          <div class="col-sm-10">
+            <input type="text" name="paymentTax" ng-model="form.paymentTax" class="form-control" required placeholder="{{phrase.payTax}} %">
+            <small>{{phrase.setZero}}</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.footer}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="footer" ng-model="form.footer" class="form-control" placeholder="{{phrase.footer}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.attendanceModel}}</label>
+          <div class="col-sm-10">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="attendanceModel" value="subject" ng-model="form.attendanceModel" required ng-checked='true'>
+                    {{phrase.subBased}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="attendanceModel" value="class" ng-model="form.attendanceModel" required >
+                    {{phrase.classBased}}
+                </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.examNotif}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="examDetailsNotif" ng-model="form.examDetailsNotif" >
+              <option value="0">{{phrase.None}}</option>
+              <option value="mail">{{phrase.email}}</option>
+              <option value="sms">{{phrase.sms}}</option>
+              <option value="mailsms">{{phrase.mailsms}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.sendExamDet}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="examDetailsNotifTo" ng-model="form.examDetailsNotifTo" >
+              <option value="student">{{phrase.students}}</option>
+              <option value="parent">{{phrase.parents}}</option>
+              <option value="both">{{phrase.studentsParents}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.sendStudentsAbsendVia}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="absentNotif" ng-model="form.absentNotif" >
+              <option value="0">{{phrase.None}}</option>
+              <option value="mail">{{phrase.email}}</option>
+              <option value="sms">{{phrase.sms}}</option>
+              <option value="mailsms">{{phrase.mailsms}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.activatedModules}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="activatedModules" multiple ng-model="form.activatedModules" >
+              <option value="newsboardAct">{{phrase.newsboard}}</option>
+              <option value="eventsAct">{{phrase.events}}</option>
+              <option value="attendanceAct">{{phrase.Attendance}}</option>
+              <option value="bookslibraryAct">{{phrase.booksLibrary}}</option>
+              <option value="assignmentsAct">{{phrase.Assignments}}</option>
+              <option value="onlineexamsAct">{{phrase.Onlineexams}}</option>
+              <option value="mediaAct">{{phrase.media}}</option>
+              <option value="paymentsAct">{{phrase.Payments}}</option>
+              <option value="pollsAct">{{phrase.Polls}}</option>
+              <option value="staticpagesAct">{{phrase.staticPages}}</option>
+              <option value="transportAct">{{phrase.Transport}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.theme}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="layoutColor" ng-model="form.layoutColor" >
+              <option value="blue">{{phrase.blue}}</option>
+              <option value="black">{{phrase.black}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editSettings.$invalid">{{phrase.editSettings}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.terms">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.schoolTerms}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editTerms" role="form" ng-submit="saveTerms()" novalidate>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.schoolTerms}} </label>
+          <div class="col-sm-10">
+            <textarea ck-editor name="fieldValue" class="form-control" ng-model="form.fieldValue" placeholder="{{phrase.schoolTerms}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editTerms.$invalid">{{phrase.saveSettings}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

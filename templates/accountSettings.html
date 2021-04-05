@@ -1,0 +1,153 @@
+<section class="content-header">
+    <h1>
+      {{phrase.AccountSettings}}
+    </h1>
+</section>
+
+<section class="content" ng-show="views.profile">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.ChgProfileData}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editDorm" role="form" ng-upload="saveProfile()" method="post" action="{{'accountSettings/profile'}}" novalidate>
+        <div class="form-group" ng-class="{'has-error': editDorm.fullName.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.FullName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="fullName" ng-model="form.fullName" class="form-control" required placeholder="{{phrase.FullName}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Gender}}</label>
+          <div class="col-sm-10">
+            
+            <div class="radio">
+                <label>
+                    <input type="radio" name="gender" value="male" ng-model="form.gender" checked="checked">
+                    {{phrase.Male}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="gender" value="female" ng-model="form.gender">
+                    {{phrase.Female}}
+                </label>
+            </div>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Birthday}}</label>
+          <div class="col-sm-10">
+            <input type="text" id="datemask" name="birthday" ng-model="form.birthday" class="form-control datemask">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Address}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="address" class="form-control" ng-model="form.address" placeholder="{{phrase.Address}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.phoneNo}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="phoneNo" class="form-control" ng-model="form.phoneNo" placeholder="{{phrase.phoneNo}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.mobileNo}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="mobileNo" class="form-control" ng-model="form.mobileNo" placeholder="{{phrase.mobileNo}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Photo}}</label>
+          <div class="col-sm-10">
+            <input type="file" name="photo">
+          </div>
+        </div>
+        <div class="form-group" ng-show="languageAllow == '1'">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.defLang}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.defLang" name="defLang">
+              <option ng-repeat="(key,value) in languages" value="{{key}}">{{value}}</option>
+            </select>
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="_token" value="{{CSRF_TOKEN}}">
+            <button type="submit" class="btn btn-default" ng-disabled="editDorm.$invalid">{{phrase.editProfile}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.email">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.chgEmailAddress}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editemail" role="form" ng-submit="saveEmail()" method="post" novalidate>
+        <div class="form-group" ng-class="{'has-error': editemail.email.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.email}} </label>
+          <div class="col-sm-10">
+            <input type="email" name="email" ng-model="form.email" class="form-control" required placeholder="{{phrase.email}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editemail.reemail.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.reemail}} </label>
+          <div class="col-sm-10">
+            <input type="email" name="reemail" ng-model="form.reemail" class="form-control" ng-match="email" required placeholder="{{phrase.reemail}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="_token" value="{{CSRF_TOKEN}}">
+            <button type="submit" class="btn btn-default" ng-disabled="editemail.$invalid">{{phrase.editMailAddress}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.password">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.chgPassword}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editpassword" role="form" ng-submit="savePassword()" method="post" novalidate>
+        <div class="form-group" ng-class="{'has-error': editpassword.password.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.oldPassword}} </label>
+          <div class="col-sm-10">
+            <input type="password" name="password" ng-model="form.password" class="form-control" required placeholder="{{phrase.oldPassword}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editpassword.newPassword.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.newPassword}} </label>
+          <div class="col-sm-10">
+            <input type="password" name="newPassword" ng-model="form.newPassword" class="form-control" required placeholder="{{phrase.newPassword}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editpassword.repassword.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.renewPassword}} </label>
+          <div class="col-sm-10">
+            <input type="password" name="repassword" ng-model="form.repassword" class="form-control" ng-match="newPassword" required placeholder="{{phrase.renewPassword}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="_token" value="{{CSRF_TOKEN}}">
+            <button type="submit" class="btn btn-default" ng-disabled="editpassword.$invalid">{{phrase.editPassword}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

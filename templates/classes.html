@@ -1,0 +1,124 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.classes}}
+    </h1>
+</section>
+
+<section class="content" ng-show="views.list">
+  <a ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.addClass}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listClasses}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.className}}</th>
+                  <th>{{phrase.classTeacher}}</th>
+                  <th>{{phrase.classDorm}}</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="class in classes | filter:searchText">
+                  <td>{{class.id}}</td>
+                  <td>{{class.className}}</td>
+                  <td>{{class.classTeacher}}</td>
+                  <td>{{class.dormitoryName}}</td>
+                  <td>
+                    <a ng-click="edit(class.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-click="remove(class,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="classes.length == '0'"><td class="noTableData" colspan="5">{{phrase.NoClasses}}</td></tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addClass}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addDorm" role="form" ng-submit="saveAdd()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addDorm.classNamee.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.className}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="classNamee" ng-model="form.className" class="form-control" required placeholder="{{phrase.className}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.classTeacher.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.classTeacher}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.classTeacher" name="classTeacher" multiple required>
+              <option ng-repeat="teacher in teachers" value="{{teacher.id}}">{{teacher.fullName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.dormitoryId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.classDorm}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.dormitoryId" name="dormitoryId" required>
+              <option ng-repeat="dormitoryOne in dormitory" value="{{dormitoryOne.id}}">{{dormitoryOne.dormitory}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addDorm.$invalid">{{phrase.addClass}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editClass}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editDorm" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addDorm.classNamee.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.className}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="classNamee" ng-model="form.className" class="form-control" required placeholder="{{phrase.className}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.classTeacher.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.classTeacher}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.classTeacher" name="classTeacher" multiple required>
+              <option ng-repeat="teacher in teachers" value="{{teacher.id}}">{{teacher.fullName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.dormitoryId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.classDorm}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.dormitoryId" name="dormitoryId" required>
+              <option ng-repeat="dormitoryOne in dormitory" value="{{dormitoryOne.id}}">{{dormitoryOne.dormitory}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editDorm.$invalid">{{phrase.editClass}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,223 @@
+<section class="content-header">
+    <div style="float:right;" class="floatRTL">
+      {{phrase.usercode}} : {{dashboardData.role}}-{{dashboardData.baseUser.id}}
+    </div>
+    <h1>
+        {{phrase.dashboard}}
+    </h1>
+</section>
+
+<section class="content">
+<div class="row">
+
+    <div class="col-lg-3 col-xs-6">
+        
+        <div class="small-box bg-aqua">
+            <div class="inner">
+                <h3>
+                    {{dashboardData.classes}}
+                </h3>
+                <p>
+                    {{phrase.classes}}
+                </p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-fw fa-users"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        
+        <div class="small-box bg-yellow">
+            <div class="inner">
+                <h3>
+                    {{dashboardData.students}}
+                </h3>
+                <p>
+                    {{phrase.students}}
+                </p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-fw fa-user"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        
+        <div class="small-box bg-green">
+            <div class="inner">
+                <h3>
+                    {{dashboardData.teachers}}
+                </h3>
+                <p>
+                    {{phrase.teachers}}
+                </p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-fw fa-male"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        
+        <div class="small-box bg-red">
+            <div class="inner">
+                <h3>
+                    {{dashboardData.newMessages}}
+                </h3>
+                <p>
+                    {{phrase.newmessages}}
+                </p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-fw fa-inbox"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+  <section class="col-lg-7 connectedSortable">                            
+
+      <div class="box box-info">
+          <div class="box-header">
+              <i class="fa fa-hand-o-up"></i>
+              <h3 class="box-title">{{phrase.leaderboard}}</h3>
+          </div>
+          <div class="box-body">
+            <div class="row" style="margin-bottom: 10px;">
+              <div class="col-md-6" ng-show="dashboardData.teacherLeaderBoard.id">
+                <p class="lead">{{phrase.teacher}}</p>
+                  <div class="user-panel">
+                      <div class="pull-left image">
+                          <img ng-src="{{dashboardData.teacherLeaderBoard.photo}}" alt="{{dashboardData.teacherLeaderBoard.fullname}}"/>
+                      </div>
+                      <div class="pull-left info">
+                          <p>{{dashboardData.teacherLeaderBoard.fullName}}</p>
+                          <a href=""> {{dashboardData.teacherLeaderBoard.isLeaderBoard}}</a>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-6" ng-show="dashboardData.studentLeaderBoard.id">
+                <p class="lead">{{phrase.student}}</p>
+                  <div class="user-panel">
+                      <div class="pull-left image">
+                          <img ng-src="{{dashboardData.studentLeaderBoard.photo}}" alt="{{dashboardData.studentLeaderBoard.fullname}}"/>
+                      </div>
+                      <div class="pull-left info">
+                          <p>{{dashboardData.studentLeaderBoard.fullName}}</p>
+                          <a href=""> {{dashboardData.studentLeaderBoard.isLeaderBoard}}</a>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div class="box box-primary">
+          <div class="box-header">
+              <i class="fa fa-clock-o"></i>
+              <h3 class="box-title">{{phrase.NewsEvents}}</h3>
+          </div>
+          <div class="box-body">
+              <ul class="todo-list">
+                  <li ng-repeat="item in dashboardData.newsEvents">
+                      <small class="label label-danger">{{item.type}}</small>
+                      <span ng-if="item.type == 'news'" class="text"><a href="#newsboard/{{item.id}}">{{item.title}}</a></span>
+                      <span ng-if="item.type == 'event'" class="text"><a href="#events/{{item.id}}">{{item.title}}</a></span>
+                  </li>
+              </ul>
+          </div>
+      </div>
+
+      <div class="box box-info">
+          <div class="box-header">
+              <i class="fa fa-hand-o-up"></i>
+              <h3 class="box-title">{{phrase.quicklinks}}</h3>
+          </div>
+          <div class="box-body" ng-show="dashboardData.role == 'admin'">
+            <div class="row" style="margin-bottom: 10px;">
+              <div class="col-md-6"><a href="#newsboard" class="btn btn-block btn-success"> {{phrase.newsboard}} </a></div>
+              <div class="col-md-6"><a href="#events" class="btn btn-block btn-success"> {{phrase.events}} </a></div>
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+              <div class="col-md-6"><a href="#classschedule" class="btn btn-block btn-success"> {{phrase.ClassSchedule}} </a></div>
+              <div class="col-md-6"><a href="#mailsms" class="btn btn-block btn-success"> {{phrase.mailsms}}</a></div>
+            </div>
+          </div>
+
+          <div class="box-body" ng-show="dashboardData.role == 'teacher'">
+            <div class="row" style="margin-bottom: 10px;">
+              <div class="col-md-6"><a href="#attendance" class="btn btn-block btn-success"> {{phrase.Attendance}} </a></div>
+              <div class="col-md-6"><a href="#examsList" class="btn btn-block btn-success"> {{phrase.examsList}} </a></div>
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+              <div class="col-md-6"><a href="#assignments" class="btn btn-block btn-success"> {{phrase.Assignments}} </a></div>
+              <div class="col-md-6"><a href="#onlineExams" class="btn btn-block btn-success"> {{phrase.Onlineexams}} </a></div>
+            </div>
+          </div>
+
+          <div class="box-body" ng-show="dashboardData.role == 'student'">
+            <div class="row" style="margin-bottom: 10px;">
+              <div class="col-md-6"><a href="#classschedule" class="btn btn-block btn-success"> {{phrase.ClassSchedule}} </a></div>
+              <div class="col-md-6"><a href="#examsList" class="btn btn-block btn-success"> {{phrase.examsList}} </a></div>
+            </div>
+            <div class="row" style="margin-bottom: 10px;">
+              <div class="col-md-6"><a href="#assignments" class="btn btn-block btn-success"> {{phrase.Assignments}} </a></div>
+              <div class="col-md-6"><a href="#onlineExams" class="btn btn-block btn-success"> {{phrase.Onlineexams}} </a></div>
+            </div>
+          </div>
+          
+          <div class="box-body" ng-show="dashboardData.role == 'parent'">
+            <div class="row" style="margin-bottom: 10px;">
+              <div class="col-md-6"><a href="#students" class="btn btn-block btn-success"> {{phrase.students}} </a></div>
+              <div class="col-md-6"><a href="#examsList" class="btn btn-block btn-success"> {{phrase.examsList}} </a></div>
+            </div>
+          </div>
+      </div>
+
+
+  </section>
+  <section class="col-lg-5 connectedSortable">
+      <div ng-show="dashboardData.polls" class="box box-info rtlPage">
+          <div class="box-header">
+              <i class="fa fa-hand-o-up"></i>
+              <h3 class="box-title">{{dashboardData.polls.title}}</h3>
+          </div>
+          <div class="box-body">
+            <div class="form-group" ng-show="dashboardData.polls.view == 'vote'">
+                <div ng-repeat="value in dashboardData.polls.items" class="radio">
+                    <label>
+                        <input type="radio" ng-model="dashboardData.polls.selected" value="{{value.title}}">{{value.title}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" ng-show="dashboardData.polls.view == 'results'">
+              <div ng-repeat="value in dashboardData.polls.items" class="radio">
+                  {{value.title}}
+                  <div class="progress progress-striped">
+                      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{value.perc}}%"></div>
+                  </div>
+              </div>
+              <div class="text-center">Total votes : {{dashboardData.polls.totalCount}}</div>
+            </div>
+          </div>
+          <div ng-if="!dashboardData.polls.voted" class="box-footer clearfix">
+              <button ng-click="dashboardData.polls.view = 'vote'" ng-show="dashboardData.polls.view == 'results'" type="button" class="pull-right btn btn-flat btn-info">{{phrase.Return}}</button> 
+              <button ng-click="dashboardData.polls.view = 'results'" ng-show="dashboardData.polls.view == 'vote'" type="button" class="pull-right btn btn-flat btn-info">{{phrase.votes}}</button> 
+              <button ng-show="dashboardData.polls.view == 'vote'" ng-click="savePollVote()" ng-disabled="!dashboardData.polls.selected" class="pull-right btn btn-flat btn-info">{{phrase.votePoll}}</button>
+          </div>
+      </div>
+
+      <div class="box box-solid bg-green-gradient">
+          <div class="box-header">
+              <i class="fa fa-calendar"></i>
+              <h3 class="box-title">{{phrase.Calendar}}</h3>
+              </div>
+          <div class="box-body">
+              <div id="scalendar" scalendar-box style="width: 100%"></div>
+          </div>  
+      </div>
+  </section>
+</div>
+</section>

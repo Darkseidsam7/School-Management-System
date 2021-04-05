@@ -1,0 +1,96 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.Attendance}}
+    </h1>
+</section>
+
+<section class="content" ng-show="views.list">
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.selectAttendance}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" ng-submit="startAttendance()" name="attendance" novalidate>
+        <div class="form-group" ng-class="{'has-error': attendance.classId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.class}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.classId" name="classId" required>
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-show="attendanceModel == 'subject'" ng-class="{'has-error': attendance.subjectId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Subject}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.subjectId" name="subjectId" ng-required="attendanceModel == 'subject'">
+              <option ng-repeat="subject in subjects" value="{{subject.id}}">{{subject.subjectTitle}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="z-index: 999999999;" ng-class="{'has-error': attendance.attendanceDay.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Date}} *</label>
+          <div class="col-sm-10">
+            <input type="text" name="attendanceDay" ng-model="form.attendanceDay" class="form-control datemask" required>
+          </div>
+        </div>
+        <div date-picker selector=".datemask" ></div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="attendance.$invalid">{{phrase.controlAttendance}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.lists">
+  <div class="box col-xs-12">
+    <div class="box-header">
+      <h3 class="box-title">{{phrase.controlAttendance}} : {{class.className}}, <span ng-show="attendanceModel == 'subject'">{{phrase.Subject}}: {{subject.subjectTitle}},</span> {{phrase.Date}} : {{form.attendanceDay}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" ng-submit="saveAttendance()" name="form" novalidate>
+        <table class="table table-bordered">
+            <tbody><tr>
+                <th style="width: 10px">#</th>
+                <th>{{phrase.studentName}}</th>
+                <th>{{phrase.Attendance}}</th>
+            </tr>
+            <tr ng-repeat="student in students | object2Array | orderBy:'studentRollId'">
+                <td>{{student.studentRollId}}</td>
+                <td>{{student.name}}</td>
+                <td>
+                  <div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" ng-model="student.attendance" value="1"> {{phrase.Present}}
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="student.attendance" value="0"> {{phrase.Absent}}
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="student.attendance" value="2"> {{phrase.Late}}
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="student.attendance" value="3"> {{phrase.LateExecuse}}
+                        </label>
+                        <label>
+                            <input type="radio" ng-model="student.attendance" value="4"> {{phrase.earlyDismissal}}
+                        </label>
+                    </div>
+                  </div>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+        <br/>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">{{phrase.saveAttendance}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

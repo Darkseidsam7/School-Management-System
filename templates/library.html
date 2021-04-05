@@ -1,0 +1,200 @@
+s<section class="content-header">
+    <h1>
+        {{phrase.Library}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <a ng-if="userRole == 'admin'" ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.addBook}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listBooks}}</h3>
+          <div class="box-tools">
+              <div class="input-group pull-right">
+                  <select class="form-control input-sm pull-right" ng-model="searchText.bookState" style="width:150px;" >
+                    <option value="">{{phrase.all}}</option>
+                    <option value="1">{{phrase.available}}</option>
+                    <option value="0">{{phrase.unavailable}}</option>
+                  </select> 
+                  <input type="text" name="table_search.name" ng-model="searchText.name" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.bookTitle}}</th>
+                  <th>{{phrase.bookAuthor}}</th>
+                  <th>{{phrase.bookPriceState}}</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr dir-paginate="book in library | filter:searchText.name | filter:{bookState:searchText.bookState} | itemsPerPage:20" total-items="totalItems">
+                  <td>{{book.id}}</td>
+                  <td>{{book.bookName}}</td>
+                  <td>{{book.bookAuthor}}</td>
+                  <td><span ng-if="book.bookType == 'traditional'">{{book.bookPrice}} / </span><span ng-if="book.bookState == 1">{{phrase.available}}</span><span ng-if="book.bookState == 0">{{phrase.unavailable}}</span>
+                  </td>
+                  <td>
+                    <a ng-show="book.bookType == 'electronic'" target="_blank" href="{{'uploads/books/'+book.bookFile}}" type="button" class="btn btn-info btn-flat" title="{{phrase.Download}}" tooltip><i class="fa fa-cloud-download"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="edit(book.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.Edit}}" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-if="userRole == 'admin'" ng-click="remove(book,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!library.length"><td class="noTableData" colspan="5">{{phrase.noBooks}}</td></tr>
+          </tbody></table>
+          <dir-pagination-controls class="pull-right" on-page-change="pageChanged(newPageNumber)" template-url="templates/dirPagination.html" ></dir-pagination-controls>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addBook}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addDorm" role="form" ng-upload="saveAdd(content)" role="form" method="post" action="library" novalidate>
+        <div class="form-group" ng-class="{'has-error': addDorm.bookName.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.bookTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="bookName" ng-model="form.bookName" class="form-control" required placeholder="{{phrase.bookTitle}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.bookDescription}}</label>
+          <div class="col-sm-10">
+            <textarea name="bookDescription" class="form-control" ng-model="form.bookDescription" placeholder="{{phrase.bookDescription}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.bookAuthor}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="bookAuthor" ng-model="form.bookAuthor" class="form-control" placeholder="{{phrase.bookAuthor}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.bookType.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.bookType}} *</label>
+          <div class="col-sm-10">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="bookType" value="traditional" ng-model="form.bookType" required checked="checked">
+                    {{phrase.traditionalBook}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="bookType" value="electronic" ng-model="form.bookType" required>
+                    {{phrase.electronicBook}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-show="form.bookType == 'traditional'">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.bookPrice}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="bookPrice" ng-model="form.bookPrice" class="form-control" placeholder="{{phrase.bookPrice}}">
+          </div>
+        </div>
+        <div class="form-group" ng-show="form.bookType == 'electronic'">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.uploadBook}}</label>
+          <div class="col-sm-10">
+            <input type="file" name="bookFile">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.State}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="bookState" ng-model="form.bookState" >
+              <option value="1">{{phrase.available}}</option>
+              <option value="0">{{phrase.unavailable}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="_token" value="{{CSRF_TOKEN}}">
+            <button type="submit" class="btn btn-default" ng-disabled="addDorm.$invalid">{{phrase.addBook}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editBook}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editDorm" ng-upload="saveEdit(content)" role="form" method="post" action="{{'library/' + form.id}}" novalidate>
+        <div class="form-group" ng-class="{'has-error': addDorm.bookName.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.bookTitle}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="bookName" ng-model="form.bookName" class="form-control" required placeholder="{{phrase.bookTitle}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.bookDescription}}</label>
+          <div class="col-sm-10">
+            <textarea name="bookDescription" class="form-control" ng-model="form.bookDescription" placeholder="{{phrase.bookDescription}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.bookAuthor}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="bookAuthor" ng-model="form.bookAuthor" class="form-control" placeholder="{{phrase.bookAuthor}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addDorm.bookType.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.bookType}} *</label>
+          <div class="col-sm-10">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="bookType" value="traditional" ng-model="form.bookType" required checked="checked">
+                    {{phrase.traditionalBook}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="bookType" value="electronic" ng-model="form.bookType" required>
+                    {{phrase.electronicBook}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-show="form.bookType == 'traditional'">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.bookPrice}}</label>
+          <div class="col-sm-10">
+            <input type="text" name="bookPrice" ng-model="form.bookPrice" class="form-control" placeholder="{{phrase.bookPrice}}">
+          </div>
+        </div>
+        <div class="form-group" ng-show="form.bookType == 'electronic'">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.uploadBook}}</label>
+          <div class="col-sm-10">
+            <input type="file" name="bookFile">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.State}}</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="bookState" ng-model="form.bookState" >
+              <option value="1">{{phrase.available}}</option>
+              <option value="0">{{phrase.unavailable}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" name="_token" value="{{CSRF_TOKEN}}">
+            <button type="submit" class="btn btn-default" ng-disabled="editDorm.$invalid">{{phrase.editBook}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

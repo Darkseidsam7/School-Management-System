@@ -1,0 +1,1236 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.Languages}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <a ng-click="changeView('add')" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.addLanguage}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listLanguage}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>languages title</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="language in languages | filter:searchText">
+                  <td>{{language.id}}</td>
+                  <td>{{language.languageTitle}}</td>
+                  <td>
+                    <a ng-click="edit(language.id)" type="button" class="btn btn-info btn-flat" title="Edit" tooltip><i class="fa fa-pencil"></i></a>
+                    <a ng-click="remove(language,$index)" type="button" class="btn btn-danger btn-flat" title="{{phrase.Remove}}" tooltip><i class="fa fa-trash-o"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!languages.length"><td class="noTableData" colspan="4">{{phrase.noLanguage}}</td></tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.add">
+<a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelAdd}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.addLanguage}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addLang" role="form" ng-submit="saveAdd()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addLang.languageTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.languageName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="languageTitle" ng-model="form.languageTitle" class="form-control" required placeholder="{{phrase.languageName}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editLang.isRTL.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.direction}} *</label>
+          <div class="col-sm-10">
+            
+            <div class="radio">
+                <label>
+                    <input type="radio" name="isRTL" value="0" ng-model="form.isRTL" required>
+                    {{phrase.ltr}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="isRTL" value="1" ng-model="form.isRTL" required>
+                    {{phrase.rtl}}
+                </label>
+            </div>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.languagePhrases}}</label>
+          <div class="col-sm-10">
+            <h4>General</h4>
+            <label class="col-sm-4">Dashboard <br/> <input type="text" name="languagePhrases" ng-model="form.languagePhrases.dashboard"> </label>
+            <label class="col-sm-4">User Code <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.usercode"> </label>
+            <label class="col-sm-4">New Messages  <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newmessages"></label>
+            <label class="col-sm-4">Leader Board  <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.leaderboard"></label>
+            <label class="col-sm-4">Quick links <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.quicklinks"> </label>
+            <label class="col-sm-4">Class Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ClassSchedule"> </label>
+            <label class="col-sm-4">Attendance <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Attendance"> </label>
+            <label class="col-sm-4">Books library <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.booksLibrary"> </label>
+            <label class="col-sm-4">Assignments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Assignments"> </label>
+            <label class="col-sm-4">Online exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Onlineexams"> </label>
+            <label class="col-sm-4">Media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.media"> </label>
+            <label class="col-sm-4">Payments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Payments"> </label>
+            <label class="col-sm-4">Polls <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Polls"> </label>
+            <label class="col-sm-4">Transport <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Transport"> </label>
+            <label class="col-sm-4">Return <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Return"> </label>
+            <label class="col-sm-4">View Votes <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.votes"> </label>
+            <label class="col-sm-4">Calendar <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Calendar"> </label>
+            <label class="col-sm-4">Search <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Search"> </label>
+            <label class="col-sm-4">ID <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ID"> </label>
+            <label class="col-sm-4">Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.name"> </label>
+            <label class="col-sm-4">Username <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.username"> </label>
+            <label class="col-sm-4">Operations <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Operations"> </label>
+            <label class="col-sm-4">Edit <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Edit"> </label>
+            <label class="col-sm-4">Remove <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Remove"> </label>
+            <label class="col-sm-4">Cancel add <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.cancelAdd"> </label>
+            <label class="col-sm-4">Cancel Edit <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.cancelEdit"> </label>
+            <label class="col-sm-4">Download <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Download"> </label>
+            <label class="col-sm-4">Calender <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Calender"> </label>
+            <label class="col-sm-4">Calender list <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Calenderlist"> </label>
+            <label class="col-sm-4">Date <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Date"> </label>
+            <label class="col-sm-4">Status <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Status"> </label>
+            <label class="col-sm-4">All <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.all"> </label>
+            <label class="col-sm-4">Print <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Print"> </label>
+            <label class="col-sm-4">Toggle Dropdown <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.toggleDropdown"> </label>
+            <label class="col-sm-4">For <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.for"> </label>
+            <label class="col-sm-4">Comments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Comments"> </label>
+            <label class="col-sm-4">From <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.from"> </label>
+            <label class="col-sm-4">To <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.to"> </label>
+            <label class="col-sm-4">Extras <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Extras"> </label>
+            <label class="col-sm-4">Export <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Export"> </label>
+            <label class="col-sm-4">Export to Excel <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ExportExcel"> </label>
+            <label class="col-sm-4">Export to PDF <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ExportPDF"> </label>
+            <label class="col-sm-4">Export to CSV <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ExportCSV"> </label>
+            <label class="col-sm-4">Import <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Import"> </label>
+            <label class="col-sm-4">Import from Excel <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ImportExcel"> </label>
+            <label class="col-sm-4">Import from CSV<br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ImportCSV"> </label>
+            <label class="col-sm-4">Available <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.available"> </label>
+            <label class="col-sm-4">Unavailable <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.unavailable"> </label>
+            <label class="col-sm-4">Details <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.details"> </label>
+            <label class="col-sm-4">Save Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.saveSettings"> </label>
+            <label class="col-sm-4">Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Description"> </label>
+            <label class="col-sm-4">Active <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Active"> </label>
+            <label class="col-sm-4">Inactive <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Inactive"> </label>
+            <label class="col-sm-4">Data imported successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.dataImported"> </label>
+            <label class="col-sm-4">Please specify file to upload <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.specifyFileToImport"> </label>
+            <label class="col-sm-4">Latest Version <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.latestVersion"> </label>
+            
+
+            <div class="clearfix"></div>
+            <h4>Login & Registeration</h4>
+            <label class="col-sm-4">Registeration <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.registerAcc"> </label>
+            <label class="col-sm-4">Please check your username & password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chkUserPass"> </label>
+            <label class="col-sm-4">Please check your username/e-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chkUserMail"> </label>
+            <label class="col-sm-4">Please check your e-mail for restore link <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chkMailRestore"> </label>
+            <label class="col-sm-4">Please check the input fields <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chkInputFields"> </label>
+            <label class="col-sm-4">Password changed successfully, press login to continue <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pwdChangedSuccess"> </label>
+            <label class="col-sm-4">Expired resore id ( > 24h ), please make new password resore request <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.expRestoreId"> </label>
+            <label class="col-sm-4">Invalid URL or restore id, please make new password resore request <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.invRstoreId"> </label>
+            <label class="col-sm-4">You must select account type <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mustSelAccType"> </label>
+            <label class="col-sm-4">You must type username <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mustSelUsername"> </label>
+            <label class="col-sm-4">You must type password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mustTypePwd"> </label>
+            <label class="col-sm-4">You must type full name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mustTypeFullName"> </label>
+            <label class="col-sm-4">Invalid e-mail address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.invEmailAdd"> </label>
+            <label class="col-sm-4">Username already used, use another one <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.usernameUsed"> </label>
+            <label class="col-sm-4">E-mail address already used, check it or restore password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailUsed"> </label>
+            <label class="col-sm-4">is not represent student code <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.notRepStCode"> </label>
+            <label class="col-sm-4">Logout <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.logout"> </label>
+            <label class="col-sm-4">Register a new membership <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.registerNewAccount"> </label>
+            
+
+            <div class="clearfix"></div>
+            <h4>Account Settings</h4>
+            <label class="col-sm-4">Account Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AccountSettings"> </label>
+            <label class="col-sm-4">Change profile <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ChgProfileData"> </label>
+            <label class="col-sm-4">Full name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.FullName"> </label>
+            <label class="col-sm-4">Gender <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Gender"> </label>
+            <label class="col-sm-4">Male <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Male"> </label>
+            <label class="col-sm-4">Female <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Female"> </label>
+            <label class="col-sm-4">Birthday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Birthday"> </label>
+            <label class="col-sm-4">Address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Address"> </label>
+            <label class="col-sm-4">Address 2 <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Address2"> </label>
+            <label class="col-sm-4">Phone No <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.phoneNo"> </label>
+            <label class="col-sm-4">Mobile No <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mobileNo"> </label>
+            <label class="col-sm-4">Photo <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Photo"> </label>
+            <label class="col-sm-4">Default language <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.defLang"> </label>
+            <label class="col-sm-4">Edit profile <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editProfile"> </label>
+            <label class="col-sm-4">Change e-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chgEmailAddress"> </label>
+            <label class="col-sm-4">Email address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.email"> </label>
+            <label class="col-sm-4">Retype Email address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.reemail"> </label>
+            <label class="col-sm-4">Edit e-mail address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editMailAddress"> </label>
+            <label class="col-sm-4">Change password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chgPassword"> </label>
+            <label class="col-sm-4">Old password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.oldPassword"> </label>
+            <label class="col-sm-4">New password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newPassword"> </label>
+            <label class="col-sm-4">Retype New password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.renewPassword"> </label>
+            <label class="col-sm-4">Edit password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editPassword"> </label>
+            <label class="col-sm-4">Password changed successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pwdChangedSuccess"> </label>
+            <label class="col-sm-4">E-mail address already used, check it or restore password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailAlreadyUsed"> </label>
+            <label class="col-sm-4">Old password don't match stored one <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.oldPwdDontMatch"> </label>
+            <label class="col-sm-4">Restore Password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.restorePwd"> </label>
+            <label class="col-sm-4">Login to your account <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.loginToAccount"> </label>
+            <label class="col-sm-4">Username / E-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.userNameOrEmail"> </label>
+            <label class="col-sm-4">Reset password now <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.resetPwdNow"> </label>
+            <label class="col-sm-4">Print this page <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.printPage"> </label>
+            <label class="col-sm-4">Remember me <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.rememberMe"> </label>
+            <label class="col-sm-4">Sign in <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.signIn"> </label>
+            <label class="col-sm-4">Parent's Students ids - seperate with , <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parntStudentIdSep"> </label>
+            <label class="col-sm-4">You'll find Student code in your student dashboard main page, it look like: <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.youfindStId"> </label>
+            <label class="col-sm-4">Thank you for register, please contact school for activating your account with id <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.thankReg"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Site settings</h4>
+            <label class="col-sm-4">Administrative tasks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.adminTasks"> </label>
+            <label class="col-sm-4">General Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.generalSettings"> </label>
+            <label class="col-sm-4">Site title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.siteTitle"> </label>
+            <label class="col-sm-4">Allow users change languages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.allowLanguage"> </label>
+            <label class="col-sm-4">Allowed <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.allowed"> </label>
+            <label class="col-sm-4">Not allowed <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.notAllowed"> </label>
+            <label class="col-sm-4">System E-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sysMail"> </label>
+            <label class="col-sm-4">Paypal payment E-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentMail"> </label>
+            <label class="col-sm-4">Payment Tax <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.payTax"> </label>
+            <label class="col-sm-4">Set to 0 for none <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.setZero"> </label>
+            <label class="col-sm-4">Footer Copyrights <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.footer"> </label>
+            <label class="col-sm-4">Attendance model <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceModel"> </label>
+            <label class="col-sm-4">Subject Based <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.subBased"> </label>
+            <label class="col-sm-4">Class only<br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classBased"> </label>
+            <label class="col-sm-4">Exam details notifications <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examNotif"> </label>
+            <label class="col-sm-4">None <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.None"> </label>
+            <label class="col-sm-4">Send exam details to <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendExamDet"> </label>
+            <label class="col-sm-4">Students & Parents <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentsParents"> </label>
+            <label class="col-sm-4">Send student's absense via <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendStudentsAbsendVia"> </label>
+            <label class="col-sm-4">Activated Modules <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.activatedModules"> </label>
+            <label class="col-sm-4">Edit settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editSettings"> </label>
+            <label class="col-sm-4">School Terms <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.schoolTerms"> </label>
+            <label class="col-sm-4">Theme <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.theme"> </label>
+            <label class="col-sm-4">Blue <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.blue"> </label>
+            <label class="col-sm-4">Black <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.black"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Administrators control</h4>
+            <label class="col-sm-4">Administrators <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Administrators"> </label>
+            <label class="col-sm-4">Add admininstrator <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addAdministrator"> </label>
+            <label class="col-sm-4">Edit admininstrator <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editAdministrator"> </label>
+            <label class="col-sm-4">List administrators <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listAdministrators"> </label>
+            <label class="col-sm-4">Admin full name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.adminFullName"> </label>
+            <label class="col-sm-4">Username <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.username"> </label>
+            <label class="col-sm-4">Password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.password"> </label>
+            <label class="col-sm-4">Username already used, use another one <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.usernameAlreadyUsed"> </label>
+            <label class="col-sm-4">E-mail address already used, check it or restore password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.emailAlreadyUsed"> </label>
+            <label class="col-sm-4">Admin updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.adminUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Assignments</h4>
+            <label class="col-sm-4">Assignments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Assignments"> </label>
+            <label class="col-sm-4">Add assignment <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AddAssignments"> </label>
+            <label class="col-sm-4">List Assignments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listAssignments"> </label>
+            <label class="col-sm-4">Assignment title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AssignmentTitle"> </label>
+            <label class="col-sm-4">Assignment Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AssignmentDescription"> </label>
+            <label class="col-sm-4">Assignment Deadline <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AssignmentDeadline"> </label>
+            <label class="col-sm-4">No assignments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noAssignments"> </label>
+            <label class="col-sm-4">Assignment File <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AssignmentFile"> </label>
+            <label class="col-sm-4">Edit Assignment <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editAssignment"> </label>
+            <label class="col-sm-4">Assignment created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.assignmentCreated"> </label>
+            <label class="col-sm-4">Assignment modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.assignmentModified"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Attendance</h4>
+            <label class="col-sm-4">Select attendance info to add <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.selectAttendance"> </label>
+            <label class="col-sm-4">Control attendance <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.controlAttendance"> </label>
+            <label class="col-sm-4">Student Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentName"> </label>
+            <label class="col-sm-4">Present <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Present"> </label>
+            <label class="col-sm-4">Absent <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Absent"> </label>
+            <label class="col-sm-4">Late <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Late"> </label>
+            <label class="col-sm-4">Late with excuse <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.LateExecuse"> </label>
+            <label class="col-sm-4">Early Dismissal <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.earlyDismissal"> </label>
+            <label class="col-sm-4">Save attendance <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.saveAttendance"> </label>
+            <label class="col-sm-4">Attendance Statistics <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceStats"> </label>
+            <label class="col-sm-4">Attendance per day <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendancePerDay"> </label>
+            <label class="col-sm-4">Attendance today <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceToday"> </label>
+            <label class="col-sm-4">Search for attendance ( Select filters ) <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceFilters"> </label>
+            <label class="col-sm-4">Search attendance <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceSearch"> </label>
+            <label class="col-sm-4">Attecndance saved successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceSaved"> </label>
+            <label class="col-sm-4">Student absense report <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.absentReport"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Classes</h4>
+            <label class="col-sm-4">Classes <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classes"> </label>
+            <label class="col-sm-4">Class <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.class"> </label>
+            <label class="col-sm-4">Add class <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addClass"> </label>
+            <label class="col-sm-4">List classes <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listClasses"> </label>
+            <label class="col-sm-4">Class name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.className"> </label>
+            <label class="col-sm-4">Class teacher <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classTeacher"> </label>
+            <label class="col-sm-4">Class dormitory <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classDorm"> </label>
+            <label class="col-sm-4">No classes <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.NoClasses"> </label>
+            <label class="col-sm-4">Edit Class <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editClass"> </label>
+            <label class="col-sm-4">Classes Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classSch"> </label>
+            <label class="col-sm-4">Select class to edit schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classEditSch"> </label>
+            <label class="col-sm-4">Read schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ReadSchedule"> </label>
+            <label class="col-sm-4">Edit Class Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editClassSch"> </label>
+            <label class="col-sm-4">Day <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Day"> </label>
+            <label class="col-sm-4">Start Time <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.startTime"> </label>
+            <label class="col-sm-4">End Time <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.endTime"> </label>
+            <label class="col-sm-4">Add Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addSch"> </label>
+            <label class="col-sm-4">Edit Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editSch"> </label>
+            <label class="col-sm-4">Sunday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Sunday"> </label>
+            <label class="col-sm-4">Monday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Monday"> </label>
+            <label class="col-sm-4">Tuesday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Tuesday"> </label>
+            <label class="col-sm-4">Wednesday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Wednesday"> </label>
+            <label class="col-sm-4">Thurusday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Thurusday"> </label>
+            <label class="col-sm-4">Friday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Friday"> </label>
+            <label class="col-sm-4">Saturday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Saturday"> </label>
+            <label class="col-sm-4">Class created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classCreated"> </label>
+            <label class="col-sm-4">Class updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Dormitories</h4>
+            <label class="col-sm-4">Dormitories <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Dormitories"> </label>
+            <label class="col-sm-4">Add dormitory <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addDormitories"> </label>
+            <label class="col-sm-4">List dormitories <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listDormitories"> </label>
+            <label class="col-sm-4">Dormitory Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.DormName"> </label>
+            <label class="col-sm-4">Dormitory Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.DormDesc"> </label>
+            <label class="col-sm-4">No dormitories <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noDorm"> </label>
+            <label class="col-sm-4">Add Dormitory <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addDorm"> </label>
+            <label class="col-sm-4">Edit Dormitory <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editDorm"> </label>
+            <label class="col-sm-4">Dormitory created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.dormCreated"> </label>
+            <label class="col-sm-4">Dormitory updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.dormUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Events / News Board</h4>
+            <label class="col-sm-4">News & Events <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.NewsEvents"></label>
+            <label class="col-sm-4">News Board <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsboard"> </label>
+            <label class="col-sm-4">Events <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.events"> </label>
+            <label class="col-sm-4">List news <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listNews"> </label>
+            <label class="col-sm-4">Add News <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addNews"> </label>
+            <label class="col-sm-4">News title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsTitle"> </label>
+            <label class="col-sm-4">News content <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsContent"> </label>
+            <label class="col-sm-4">No news <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noNews"> </label>
+            <label class="col-sm-4">Edit News <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editNews"> </label>
+            <label class="col-sm-4">List events <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listEvents"> </label>
+            <label class="col-sm-4">Event Name / Place <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventNamePlace"> </label>
+            <label class="col-sm-4">Event Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventDescription"> </label>
+            <label class="col-sm-4">No events <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noEvents"> </label>
+            <label class="col-sm-4">Add event <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addEvent"> </label>
+            <label class="col-sm-4">Event Title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventTitle"> </label>
+            <label class="col-sm-4">Event Place <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventPlace"> </label>
+            <label class="col-sm-4">Edit event <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editEvent"> </label>
+            <label class="col-sm-4">Event created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventCreated"> </label>
+            <label class="col-sm-4">Event modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventModified"> </label>
+            <label class="col-sm-4">News created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsCreated"> </label>
+            <label class="col-sm-4">News modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsModified"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Exams</h4>
+            <label class="col-sm-4">Exams List <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examsList"> </label>
+            <label class="col-sm-4">Add exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addExam"> </label>
+            <label class="col-sm-4">List exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listExams"> </label>
+            <label class="col-sm-4">Exam Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examName"> </label>
+            <label class="col-sm-4">Exam Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examDesc"> </label>
+            <label class="col-sm-4">Show marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.showMarks"> </label>
+            <label class="col-sm-4">Mark <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mark"> </label>
+            <label class="col-sm-4">Send marks notifications <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendExamMarks"> </label>
+            <label class="col-sm-4">No exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noExams"> </label>
+            <label class="col-sm-4">Select class & subject for exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.selClassSubExam"> </label>
+            <label class="col-sm-4">Add marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addMarks"> </label>
+            <label class="col-sm-4">Control marks for Exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.controlMarksExam"> </label>
+            <label class="col-sm-4">Attendance Marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceMakrs"> </label>
+            <label class="col-sm-4">Exam Marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examMarks"> </label>
+            <label class="col-sm-4">Add/Update Marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addUpdateMarks"> </label>
+            <label class="col-sm-4">Grade levels <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeLevels"> </label>
+            <label class="col-sm-4">Add Grade level <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addLevel"> </label>
+            <label class="col-sm-4">List grades <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listMarks"> </label>
+            <label class="col-sm-4">Grade Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeName"> </label>
+            <label class="col-sm-4">Grade Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeDesc"> </label>
+            <label class="col-sm-4">Grade Point <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradePoint"> </label>
+            <label class="col-sm-4">No grades <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noGrades"> </label>
+            <label class="col-sm-4">Grade From <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeFrom"> </label>
+            <label class="col-sm-4">Grade To <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeTo"> </label>
+            <label class="col-sm-4">Edit grade <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editGrade"> </label>
+            <label class="col-sm-4">Grade created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeCreated"> </label>
+            <label class="col-sm-4">Grade updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeUpdated"> </label>
+            <label class="col-sm-4">Online Exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.onlineExams"> </label>
+            <label class="col-sm-4">Exam Deadline <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examDeadline"> </label>
+            <label class="col-sm-4">Take exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.takeExam"> </label>
+            <label class="col-sm-4">Show grade after finish exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.showExamGradesAfter"> </label>
+            <label class="col-sm-4">Questions <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Questions"> </label>
+            <label class="col-sm-4">Question <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Question"> </label>
+            <label class="col-sm-4">Answers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Answers"> </label>
+            <label class="col-sm-4">True Answer <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.trueAns"> </label>
+            <label class="col-sm-4">Add question <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addQuestion"> </label>
+            <label class="col-sm-4">Info Box <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.infoBox"> </label>
+            <label class="col-sm-4">Edit Exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editExam"> </label>
+            <label class="col-sm-4">Submit answers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.submitAnswers"> </label>
+            <label class="col-sm-4">Grade <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Grade"> </label>
+            <label class="col-sm-4">Average Points <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AveragePoints"> </label>
+            <label class="col-sm-4">Exam created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examCreated"> </label>
+            <label class="col-sm-4">Exam modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examModified"> </label>
+            <label class="col-sm-4">Exam details notifications <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examDetailsNot"> </label>
+            <label class="col-sm-4">Please adjust exam notifications first from General settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.adjustExamNot"> </label>
+            <label class="col-sm-4">Notifications sent successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examNotSent"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Languages</h4>
+            <label class="col-sm-4">Languages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Languages"> </label>
+            <label class="col-sm-4">Add language <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addLanguage"> </label>
+            <label class="col-sm-4">List languages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listLanguage"> </label>
+            <label class="col-sm-4">No languages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noLanguage"> </label>
+            <label class="col-sm-4">Language Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.languageName"> </label>
+            <label class="col-sm-4">Language phrases <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.languagePhrases"> </label>
+            <label class="col-sm-4">Edit Language <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editLanguage"> </label>
+            <label class="col-sm-4">Language created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.langCreated"> </label>
+            <label class="col-sm-4">Language updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.langModified"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Library</h4>
+            <label class="col-sm-4">Library <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Library"> </label>
+            <label class="col-sm-4">Add Book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addBook"> </label>
+            <label class="col-sm-4">List Books <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listBooks"> </label>
+            <label class="col-sm-4">Book title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookTitle"> </label>
+            <label class="col-sm-4">Book Author <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookAuthor"> </label>
+            <label class="col-sm-4">Book Price / State <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookPriceState"> </label>
+            <label class="col-sm-4">No books <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noBooks"> </label>
+            <label class="col-sm-4">Book Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookDescription"> </label>
+            <label class="col-sm-4">Book Type <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookType"> </label>
+            <label class="col-sm-4">Traditional Book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.traditionalBook"> </label>
+            <label class="col-sm-4">Electronic Book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.electronicBook"> </label>
+            <label class="col-sm-4">Book Price <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookPrice"> </label>
+            <label class="col-sm-4">Upload book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.uploadBook"> </label>
+            <label class="col-sm-4">State <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.State"> </label>
+            <label class="col-sm-4">Edit book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editBook"> </label>
+            <label class="col-sm-4">Book added successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookAdded"> </label>
+            <label class="col-sm-4">Book modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookModified"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Mail / SMS</h4>
+            <label class="col-sm-4">Mail / SMS <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailsms"> </label>
+            <label class="col-sm-4">SMS <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sms"> </label>
+            <label class="col-sm-4">List of sent messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listSentMessages"> </label>
+            <label class="col-sm-4">Mail/SMS Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailsmsSettings"> </label>
+            <label class="col-sm-4">Select users <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.selUsers"> </label>
+            <label class="col-sm-4">Type of users <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.typeUsers"> </label>
+            <label class="col-sm-4">Send as <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendAs"> </label>
+            <label class="col-sm-4">Message Title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.messageTitle"> </label>
+            <label class="col-sm-4">Message Content <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.messageContent"> </label>
+            <label class="col-sm-4">Send Mail / SMS <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailSMSSend"> </label>
+            <label class="col-sm-4">List Messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listMessages"> </label>
+            <label class="col-sm-4">Type / Date <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.typeDate"> </label>
+            <label class="col-sm-4">Sender <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Sender"> </label>
+            <label class="col-sm-4">No messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noMessages"> </label>
+            <label class="col-sm-4">SMS Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.smsSettings"> </label>
+            <label class="col-sm-4">SMS Provider <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.smsProvider"> </label>
+            <label class="col-sm-4">Mail Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailSettings"> </label>
+            <label class="col-sm-4">Mail Delivery Type <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailDeliverType"> </label>
+            <label class="col-sm-4">Mail / SMS Templates <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailsmsTemplates"> </label>
+            <label class="col-sm-4">List templates <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listTemplates"> </label>
+            <label class="col-sm-4">Template title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.templateTitle"> </label>
+            <label class="col-sm-4">No templates <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noTemplates"> </label>
+            <label class="col-sm-4">Edit template <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editTemplate"> </label>
+            <label class="col-sm-4">Template variables <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.templateVars"> </label>
+            <label class="col-sm-4">Mail template <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailTemplate"> </label>
+            <label class="col-sm-4">SMS template <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.smsTemplate"> </label>
+            <label class="col-sm-4">Template updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.templateUpdated"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Media</h4>
+            <label class="col-sm-4">Media Center <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaCenter"> </label>
+            <label class="col-sm-4">Go to up <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.goUp"> </label>
+            <label class="col-sm-4">Upload media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.uploadMedia"> </label>
+            <label class="col-sm-4">Add album <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addAlbum"> </label>
+            <label class="col-sm-4">Albums <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albums"> </label>
+            <label class="col-sm-4">Media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.media"> </label>
+            <label class="col-sm-4">No media exist in this album <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noMediaInAlbum"> </label>
+            <label class="col-sm-4">Album title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumTitle"> </label>
+            <label class="col-sm-4">Album description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumDesc"> </label>
+            <label class="col-sm-4">Album image <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumImage"> </label>
+            <label class="col-sm-4">Edit album <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editAlbum"> </label>
+            <label class="col-sm-4">Add media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addMedia"> </label>
+            <label class="col-sm-4">Media title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaTitle"> </label>
+            <label class="col-sm-4">Media description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaDesc"> </label>
+            <label class="col-sm-4">Media image <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaImage"> </label>
+            <label class="col-sm-4">Edit media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editMedia"> </label>
+            <label class="col-sm-4">Album created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumCreated"> </label>
+            <label class="col-sm-4">Album modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumModified"> </label>
+            <label class="col-sm-4">Media created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaCreated"> </label>
+            <label class="col-sm-4">Media created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaModified"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Messages</h4>
+            <label class="col-sm-4">Messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Messages"> </label>
+            <label class="col-sm-4">Mark as read <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.markRead"> </label>
+            <label class="col-sm-4">Mark as unread <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.markUnread"> </label>
+            <label class="col-sm-4">Compose Message <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.composeMessage"> </label>
+            <label class="col-sm-4">No messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noMessages"> </label>
+            <label class="col-sm-4">Load old messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.loadOldMessages"> </label>
+            <label class="col-sm-4">Type reply ( press enter to submit ) ... <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.typeReply"> </label>
+            <label class="col-sm-4">Send new message <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendMessage"> </label>
+            <label class="col-sm-4">Send message to (username) <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendMessageTo"> </label>
+            <label class="col-sm-4">Message <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.message"> </label>
+            <label class="col-sm-4">Read Message <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.readMessage"> </label>
+            <label class="col-sm-4">The message you try to reach not exist <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.messageNotExist"> </label>
+            <label class="col-sm-4">User isn't exist <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.userisntExist"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Payments</h4>
+            <label class="col-sm-4">Payments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Payments"> </label>
+            <label class="col-sm-4">Add payment <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addPayment"> </label>
+            <label class="col-sm-4">List payments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listPayments"> </label>
+            <label class="col-sm-4">Payment Title / Date <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentTitleDate"> </label>
+            <label class="col-sm-4">Payment Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentDesc"> </label>
+            <label class="col-sm-4">Amount <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Amount"> </label>
+            <label class="col-sm-4">PAID <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paid"> </label>
+            <label class="col-sm-4">UNPAID <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.unpaid"> </label>
+            <label class="col-sm-4">View invoice <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.viewInvoice"> </label>
+            <label class="col-sm-4">No payments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noPayments"> </label>
+            <label class="col-sm-4">Payment Title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentTitle"> </label>
+            <label class="col-sm-4">Selecting multiple students will generate seperate invoice for each one <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentSelectMultiple"> </label>
+            <label class="col-sm-4">Edit payment <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editPayment"> </label>
+            <label class="col-sm-4">Product <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Product"> </label>
+            <label class="col-sm-4">Subtotal <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Subtotal"> </label>
+            <label class="col-sm-4">Amount Due <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AmountDue"> </label>
+            <label class="col-sm-4">Total <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Total"> </label>
+            <label class="col-sm-4">List payment details <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listPaymentDetail"> </label>
+            <label class="col-sm-4">Payments created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentCreated"> </label>
+            <label class="col-sm-4">Payments modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentModified"> </label>
+            <label class="col-sm-4">Payment details <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentDetails"> </label>
+            <label class="col-sm-4">No Payment Details exist <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noPaymentDetails"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Polls</h4>
+            <label class="col-sm-4">Polls <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Polls"> </label>
+            <label class="col-sm-4">Add poll <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addPoll"> </label>
+            <label class="col-sm-4">List polls <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listPolls"> </label>
+            <label class="col-sm-4">Poll title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollTitle"> </label>
+            <label class="col-sm-4">Poll target <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollTarget"> </label>
+            <label class="col-sm-4">Poll status <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollStatus"> </label>
+            <label class="col-sm-4">No Polls <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noPolls"> </label>
+            <label class="col-sm-4">Poll Options <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollOptions"> </label>
+            <label class="col-sm-4">New Option <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newOption"> </label>
+            <label class="col-sm-4">Edit poll <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editPoll"> </label>
+            <label class="col-sm-4">Vote poll <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.votePoll"> </label>
+            <label class="col-sm-4">You already voted before <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.alreadyvoted"> </label>
+            <label class="col-sm-4">Poll created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollCreated"> </label>
+            <label class="col-sm-4">Activate Poll <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.activatePoll"> </label>
+            <label class="col-sm-4">Poll activated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollActivated"> </label>
+            <label class="col-sm-4">Poll updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Static pages</h4>
+            <label class="col-sm-4">Static pages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.staticPages"> </label>
+            <label class="col-sm-4">Control Pages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.controlPages"> </label>
+            <label class="col-sm-4">Add page <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addPage"> </label>
+            <label class="col-sm-4">List pages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listPages"> </label>
+            <label class="col-sm-4">Page title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageTitle"> </label>
+            <label class="col-sm-4">Page content <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageContent"> </label>
+            <label class="col-sm-4">Edit page <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editPage"> </label>
+            <label class="col-sm-4">Active / Inactive page <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.activeInactivePage"> </label>
+            <label class="col-sm-4">Page created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageCreated"> </label>
+            <label class="col-sm-4">Page modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageModified"> </label>
+            <label class="col-sm-4">Page changed successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageChanged"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Subjects</h4>
+            <label class="col-sm-4">Subjects <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Subjects"> </label>
+            <label class="col-sm-4">Subject <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Subject"> </label>
+            <label class="col-sm-4">Add subject <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addSubject"> </label>
+            <label class="col-sm-4">Subject name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.subjectName"> </label>
+            <label class="col-sm-4">No subjects <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noSubjects"> </label>
+            <label class="col-sm-4">Edit Subject <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editSubject"> </label>
+            <label class="col-sm-4">Subject created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.subjectCreated"> </label>
+            <label class="col-sm-4">Subject edited successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.subjectEdited"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Transportation</h4>
+            <label class="col-sm-4">Transportation <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Transportation"> </label>
+            <label class="col-sm-4">Add transport <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addTransport"> </label>
+            <label class="col-sm-4">List transportation <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listTransport"> </label>
+            <label class="col-sm-4">Transport title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.transportTitle"> </label>
+            <label class="col-sm-4">Transport Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.transportDesc"> </label>
+            <label class="col-sm-4">Driver Contact <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.driverContact"> </label>
+            <label class="col-sm-4">Fare <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Fare"> </label>
+            <label class="col-sm-4">List subscribers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listSubs"> </label>
+            <label class="col-sm-4">No Transportation <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noTransportation"> </label>
+            <label class="col-sm-4">Edit Transport <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editTransport"> </label>
+            <label class="col-sm-4">Contact <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Contact"> </label>
+            <label class="col-sm-4">No matches <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noMatches"> </label>
+            <label class="col-sm-4">Transportation created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.transportCreated"> </label>
+            <label class="col-sm-4">Transportation updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.transportUpdated"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Users</h4>
+            <label class="col-sm-4">Parents <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parents"> </label>
+            <label class="col-sm-4">Parent <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parent"> </label>
+            <label class="col-sm-4">Students <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.students"> </label>
+            <label class="col-sm-4">Student <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.student"> </label>
+            <label class="col-sm-4">Teachers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teachers"> </label>
+            <label class="col-sm-4">Teacher <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teacher"> </label>
+            <label class="col-sm-4">Role <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.role"> </label>
+            <label class="col-sm-4">Add teacher <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addTeacher"> </label>
+            <label class="col-sm-4">Waiting approval <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.waitingApproval"> </label>
+            <label class="col-sm-4">List teachers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listTeachers"> </label>
+            <label class="col-sm-4">No teachers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noTeachers"> </label>
+            <label class="col-sm-4">Approve <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Approve"> </label>
+            <label class="col-sm-4">Edit Teacher <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.EditTeacher"> </label>
+            <label class="col-sm-4">File to import <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.fileToImport"> </label>
+            <label class="col-sm-4">Add student <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addStudent"> </label>
+            <label class="col-sm-4">List students <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listStudents"> </label>
+            <label class="col-sm-4">Marksheet <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Marksheet"> </label>
+            <label class="col-sm-4">No students <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noStudents"> </label>
+            <label class="col-sm-4">Roll id <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.rollid"> </label>
+            <label class="col-sm-4">Edit student <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editStudent"> </label>
+            <label class="col-sm-4">Add parent <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AddParent"> </label>
+            <label class="col-sm-4">List parents <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listParents"> </label>
+            <label class="col-sm-4">No parents <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noParents"> </label>
+            <label class="col-sm-4">Profession <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Profession"> </label>
+            <label class="col-sm-4">Student Details <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentDetails"> </label>
+            <label class="col-sm-4">Relation <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Relation"> </label>
+            <label class="col-sm-4">Edit Parent <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editParent"> </label>
+            <label class="col-sm-4">This file not represent CSV parents file <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.csvParentInvalid"> </label>
+            <label class="col-sm-4">Parent created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parentCreated"> </label>
+            <label class="col-sm-4">Parent modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parentModified"> </label>
+            <label class="col-sm-4">Profile <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Profile"> </label>
+            <label class="col-sm-4">Parent Information <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parentInfo"> </label>
+            <label class="col-sm-4">Student Information <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentInfo"> </label>
+            <label class="col-sm-4">Teacher Information <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teacherInfo"> </label>
+            <label class="col-sm-4">This file not represent CSV student file <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.csvStudentInvalid"> </label>
+            <label class="col-sm-4">Student created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentCreatedSuccess"> </label>
+            <label class="col-sm-4">Student has no marks till now <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentHaveNoMarks"> </label>
+            <label class="col-sm-4">Student modified successfully<br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentModified"> </label>
+            <label class="col-sm-4">This file not represent CSV teacher file <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.csvTeacherInvalid"> </label>
+            <label class="col-sm-4">Teacher created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teacherCreated"> </label>
+            <label class="col-sm-4">Teacher updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teacherUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Promotion</h4>
+            <label class="col-sm-4">Promotion <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Promotion"> </label>
+            <label class="col-sm-4">Promote students <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.promoteStudents"> </label>
+            <label class="col-sm-4">Students to be promoted <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentsToBPronoted"> </label>
+            <label class="col-sm-4">Students will promoted to class <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentsPromotedClass"> </label>
+            
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addLang.$invalid">{{phrase.addLanguage}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.cancelEdit}}</a> 
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editLanguage}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editLang" role="form" ng-submit="saveEdit()" novalidate>
+        <div class="form-group" ng-class="{'has-error': editLang.languageTitle.$invalid}">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.languageName}} * </label>
+          <div class="col-sm-10">
+            <input type="text" name="languageTitle" ng-model="form.languageTitle" class="form-control" required placeholder="{{phrase.languageName}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editLang.isRTL.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.direction}} *</label>
+          <div class="col-sm-10">
+            
+            <div class="radio">
+                <label>
+                    <input type="radio" name="isRTL" value="0" ng-model="form.isRTL" required>
+                    {{phrase.ltr}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="isRTL" value="1" ng-model="form.isRTL" required>
+                    {{phrase.rtl}}
+                </label>
+            </div>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.languagePhrases}}</label>
+          <div class="col-sm-10">
+            <h4>General</h4>
+            <label class="col-sm-4">Dashboard <br/> <input type="text" name="languagePhrases" ng-model="form.languagePhrases.dashboard"> </label>
+            <label class="col-sm-4">User Code <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.usercode"> </label>
+            <label class="col-sm-4">New Messages  <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newmessages"></label>
+            <label class="col-sm-4">Leader Board  <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.leaderboard"></label>
+            <label class="col-sm-4">Quick links <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.quicklinks"> </label>
+            <label class="col-sm-4">Class Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ClassSchedule"> </label>
+            <label class="col-sm-4">Attendance <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Attendance"> </label>
+            <label class="col-sm-4">Books library <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.booksLibrary"> </label>
+            <label class="col-sm-4">Assignments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Assignments"> </label>
+            <label class="col-sm-4">Online exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Onlineexams"> </label>
+            <label class="col-sm-4">Media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.media"> </label>
+            <label class="col-sm-4">Payments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Payments"> </label>
+            <label class="col-sm-4">Polls <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Polls"> </label>
+            <label class="col-sm-4">Transport <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Transport"> </label>
+            <label class="col-sm-4">Return <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Return"> </label>
+            <label class="col-sm-4">View Votes <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.votes"> </label>
+            <label class="col-sm-4">Calendar <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Calendar"> </label>
+            <label class="col-sm-4">Search <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Search"> </label>
+            <label class="col-sm-4">ID <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ID"> </label>
+            <label class="col-sm-4">Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.name"> </label>
+            <label class="col-sm-4">Username <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.username"> </label>
+            <label class="col-sm-4">Operations <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Operations"> </label>
+            <label class="col-sm-4">Edit <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Edit"> </label>
+            <label class="col-sm-4">Remove <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Remove"> </label>
+            <label class="col-sm-4">Cancel add <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.cancelAdd"> </label>
+            <label class="col-sm-4">Cancel Edit <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.cancelEdit"> </label>
+            <label class="col-sm-4">Download <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Download"> </label>
+            <label class="col-sm-4">Calender <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Calender"> </label>
+            <label class="col-sm-4">Calender list <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Calenderlist"> </label>
+            <label class="col-sm-4">Date <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Date"> </label>
+            <label class="col-sm-4">Status <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Status"> </label>
+            <label class="col-sm-4">All <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.all"> </label>
+            <label class="col-sm-4">Print <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Print"> </label>
+            <label class="col-sm-4">Toggle Dropdown <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.toggleDropdown"> </label>
+            <label class="col-sm-4">For <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.for"> </label>
+            <label class="col-sm-4">Comments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Comments"> </label>
+            <label class="col-sm-4">From <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.from"> </label>
+            <label class="col-sm-4">To <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.to"> </label>
+            <label class="col-sm-4">Extras <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Extras"> </label>
+            <label class="col-sm-4">Export <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Export"> </label>
+            <label class="col-sm-4">Export to Excel <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ExportExcel"> </label>
+            <label class="col-sm-4">Export to PDF <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ExportPDF"> </label>
+            <label class="col-sm-4">Export to CSV <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ExportCSV"> </label>
+            <label class="col-sm-4">Import <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Import"> </label>
+            <label class="col-sm-4">Import from Excel <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ImportExcel"> </label>
+            <label class="col-sm-4">Import from CSV<br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ImportCSV"> </label>
+            <label class="col-sm-4">Available <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.available"> </label>
+            <label class="col-sm-4">Unavailable <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.unavailable"> </label>
+            <label class="col-sm-4">Details <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.details"> </label>
+            <label class="col-sm-4">Save Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.saveSettings"> </label>
+            <label class="col-sm-4">Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Description"> </label>
+            <label class="col-sm-4">Active <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Active"> </label>
+            <label class="col-sm-4">Inactive <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Inactive"> </label>
+            <label class="col-sm-4">Data imported successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.dataImported"> </label>
+            <label class="col-sm-4">Please specify file to upload <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.specifyFileToImport"> </label>
+            <label class="col-sm-4">Latest Version <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.latestVersion"> </label>
+            <label class="col-sm-4">Direction <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.direction"> </label>
+            <label class="col-sm-4">Right to left <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.rtl"> </label>
+            <label class="col-sm-4">Left to right <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ltr"> </label>
+            
+
+            <div class="clearfix"></div>
+            <h4>Login & Registeration</h4>
+            <label class="col-sm-4">Registeration <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.registerAcc"> </label>
+            <label class="col-sm-4">Please check your username & password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chkUserPass"> </label>
+            <label class="col-sm-4">Please check your username/e-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chkUserMail"> </label>
+            <label class="col-sm-4">Please check your e-mail for restore link <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chkMailRestore"> </label>
+            <label class="col-sm-4">Please check the input fields <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chkInputFields"> </label>
+            <label class="col-sm-4">Password changed successfully, press login to continue <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pwdChangedSuccess"> </label>
+            <label class="col-sm-4">Expired resore id ( > 24h ), please make new password resore request <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.expRestoreId"> </label>
+            <label class="col-sm-4">Invalid URL or restore id, please make new password resore request <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.invRstoreId"> </label>
+            <label class="col-sm-4">You must select account type <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mustSelAccType"> </label>
+            <label class="col-sm-4">You must type username <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mustSelUsername"> </label>
+            <label class="col-sm-4">You must type password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mustTypePwd"> </label>
+            <label class="col-sm-4">You must type full name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mustTypeFullName"> </label>
+            <label class="col-sm-4">Invalid e-mail address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.invEmailAdd"> </label>
+            <label class="col-sm-4">Username already used, use another one <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.usernameUsed"> </label>
+            <label class="col-sm-4">E-mail address already used, check it or restore password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailUsed"> </label>
+            <label class="col-sm-4">is not represent student code <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.notRepStCode"> </label>
+            <label class="col-sm-4">Logout <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.logout"> </label>
+            <label class="col-sm-4">Register a new membership <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.registerNewAccount"> </label>
+            
+
+            <div class="clearfix"></div>
+            <h4>Account Settings</h4>
+            <label class="col-sm-4">Account Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AccountSettings"> </label>
+            <label class="col-sm-4">Change profile <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ChgProfileData"> </label>
+            <label class="col-sm-4">Full name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.FullName"> </label>
+            <label class="col-sm-4">Gender <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Gender"> </label>
+            <label class="col-sm-4">Male <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Male"> </label>
+            <label class="col-sm-4">Female <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Female"> </label>
+            <label class="col-sm-4">Birthday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Birthday"> </label>
+            <label class="col-sm-4">Address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Address"> </label>
+            <label class="col-sm-4">Address 2 <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Address2"> </label>
+            <label class="col-sm-4">Phone No <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.phoneNo"> </label>
+            <label class="col-sm-4">Mobile No <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mobileNo"> </label>
+            <label class="col-sm-4">Photo <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Photo"> </label>
+            <label class="col-sm-4">Default language <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.defLang"> </label>
+            <label class="col-sm-4">Edit profile <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editProfile"> </label>
+            <label class="col-sm-4">Change e-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chgEmailAddress"> </label>
+            <label class="col-sm-4">Email address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.email"> </label>
+            <label class="col-sm-4">Retype Email address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.reemail"> </label>
+            <label class="col-sm-4">Edit e-mail address <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editMailAddress"> </label>
+            <label class="col-sm-4">Change password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.chgPassword"> </label>
+            <label class="col-sm-4">Old password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.oldPassword"> </label>
+            <label class="col-sm-4">New password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newPassword"> </label>
+            <label class="col-sm-4">Retype New password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.renewPassword"> </label>
+            <label class="col-sm-4">Edit password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editPassword"> </label>
+            <label class="col-sm-4">Password changed successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pwdChangedSuccess"> </label>
+            <label class="col-sm-4">E-mail address already used, check it or restore password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailAlreadyUsed"> </label>
+            <label class="col-sm-4">Old password don't match stored one <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.oldPwdDontMatch"> </label>
+            <label class="col-sm-4">Restore Password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.restorePwd"> </label>
+            <label class="col-sm-4">Login to your account <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.loginToAccount"> </label>
+            <label class="col-sm-4">Username / E-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.userNameOrEmail"> </label>
+            <label class="col-sm-4">Reset password now <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.resetPwdNow"> </label>
+            <label class="col-sm-4">Print this page <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.printPage"> </label>
+            <label class="col-sm-4">Remember me <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.rememberMe"> </label>
+            <label class="col-sm-4">Sign in <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.signIn"> </label>
+            <label class="col-sm-4">Parent's Students ids - seperate with , <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parntStudentIdSep"> </label>
+            <label class="col-sm-4">You'll find Student code in your student dashboard main page, it look like: <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.youfindStId"> </label>
+            <label class="col-sm-4">Thank you for register, please contact school for activating your account with id <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.thankReg"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Site settings</h4>
+            <label class="col-sm-4">Administrative tasks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.adminTasks"> </label>
+            <label class="col-sm-4">General Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.generalSettings"> </label>
+            <label class="col-sm-4">Site title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.siteTitle"> </label>
+            <label class="col-sm-4">Allow users change languages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.allowLanguage"> </label>
+            <label class="col-sm-4">Allowed <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.allowed"> </label>
+            <label class="col-sm-4">Not allowed <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.notAllowed"> </label>
+            <label class="col-sm-4">System E-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sysMail"> </label>
+            <label class="col-sm-4">Paypal payment E-mail <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentMail"> </label>
+            <label class="col-sm-4">Payment Tax <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.payTax"> </label>
+            <label class="col-sm-4">Set to 0 for none <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.setZero"> </label>
+            <label class="col-sm-4">Footer Copyrights <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.footer"> </label>
+            <label class="col-sm-4">Attendance model <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceModel"> </label>
+            <label class="col-sm-4">Subject Based <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.subBased"> </label>
+            <label class="col-sm-4">Class only<br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classBased"> </label>
+            <label class="col-sm-4">Exam details notifications <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examNotif"> </label>
+            <label class="col-sm-4">None <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.None"> </label>
+            <label class="col-sm-4">Send exam details to <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendExamDet"> </label>
+            <label class="col-sm-4">Students & Parents <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentsParents"> </label>
+            <label class="col-sm-4">Send student's absense via <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendStudentsAbsendVia"> </label>
+            <label class="col-sm-4">Activated Modules <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.activatedModules"> </label>
+            <label class="col-sm-4">Edit settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editSettings"> </label>
+            <label class="col-sm-4">School Terms <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.schoolTerms"> </label>
+            <label class="col-sm-4">Theme <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.theme"> </label>
+            <label class="col-sm-4">Blue <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.blue"> </label>
+            <label class="col-sm-4">Black <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.black"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Administrators control</h4>
+            <label class="col-sm-4">Administrators <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Administrators"> </label>
+            <label class="col-sm-4">Add admininstrator <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addAdministrator"> </label>
+            <label class="col-sm-4">Edit admininstrator <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editAdministrator"> </label>
+            <label class="col-sm-4">List administrators <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listAdministrators"> </label>
+            <label class="col-sm-4">Admin full name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.adminFullName"> </label>
+            <label class="col-sm-4">Username <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.username"> </label>
+            <label class="col-sm-4">Password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.password"> </label>
+            <label class="col-sm-4">Username already used, use another one <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.usernameAlreadyUsed"> </label>
+            <label class="col-sm-4">E-mail address already used, check it or restore password <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.emailAlreadyUsed"> </label>
+            <label class="col-sm-4">Admin updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.adminUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Assignments</h4>
+            <label class="col-sm-4">Assignments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Assignments"> </label>
+            <label class="col-sm-4">Add assignment <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AddAssignments"> </label>
+            <label class="col-sm-4">List Assignments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listAssignments"> </label>
+            <label class="col-sm-4">Assignment title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AssignmentTitle"> </label>
+            <label class="col-sm-4">Assignment Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AssignmentDescription"> </label>
+            <label class="col-sm-4">Assignment Deadline <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AssignmentDeadline"> </label>
+            <label class="col-sm-4">No assignments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noAssignments"> </label>
+            <label class="col-sm-4">Assignment File <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AssignmentFile"> </label>
+            <label class="col-sm-4">Edit Assignment <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editAssignment"> </label>
+            <label class="col-sm-4">Assignment created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.assignmentCreated"> </label>
+            <label class="col-sm-4">Assignment modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.assignmentModified"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Attendance</h4>
+            <label class="col-sm-4">Select attendance info to add <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.selectAttendance"> </label>
+            <label class="col-sm-4">Control attendance <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.controlAttendance"> </label>
+            <label class="col-sm-4">Student Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentName"> </label>
+            <label class="col-sm-4">Present <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Present"> </label>
+            <label class="col-sm-4">Absent <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Absent"> </label>
+            <label class="col-sm-4">Late <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Late"> </label>
+            <label class="col-sm-4">Late with excuse <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.LateExecuse"> </label>
+            <label class="col-sm-4">Early Dismissal <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.earlyDismissal"> </label>
+            <label class="col-sm-4">Save attendance <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.saveAttendance"> </label>
+            <label class="col-sm-4">Attendance Statistics <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceStats"> </label>
+            <label class="col-sm-4">Attendance per day <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendancePerDay"> </label>
+            <label class="col-sm-4">Attendance today <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceToday"> </label>
+            <label class="col-sm-4">Search for attendance ( Select filters ) <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceFilters"> </label>
+            <label class="col-sm-4">Search attendance <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceSearch"> </label>
+            <label class="col-sm-4">Attecndance saved successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceSaved"> </label>
+            <label class="col-sm-4">Student absense report <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.absentReport"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Classes</h4>
+            <label class="col-sm-4">Classes <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classes"> </label>
+            <label class="col-sm-4">Class <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.class"> </label>
+            <label class="col-sm-4">Add class <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addClass"> </label>
+            <label class="col-sm-4">List classes <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listClasses"> </label>
+            <label class="col-sm-4">Class name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.className"> </label>
+            <label class="col-sm-4">Class teacher <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classTeacher"> </label>
+            <label class="col-sm-4">Class dormitory <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classDorm"> </label>
+            <label class="col-sm-4">No classes <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.NoClasses"> </label>
+            <label class="col-sm-4">Edit Class <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editClass"> </label>
+            <label class="col-sm-4">Classes Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classSch"> </label>
+            <label class="col-sm-4">Select class to edit schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classEditSch"> </label>
+            <label class="col-sm-4">Read schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.ReadSchedule"> </label>
+            <label class="col-sm-4">Edit Class Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editClassSch"> </label>
+            <label class="col-sm-4">Day <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Day"> </label>
+            <label class="col-sm-4">Start Time <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.startTime"> </label>
+            <label class="col-sm-4">End Time <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.endTime"> </label>
+            <label class="col-sm-4">Add Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addSch"> </label>
+            <label class="col-sm-4">Edit Schedule <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editSch"> </label>
+            <label class="col-sm-4">Sunday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Sunday"> </label>
+            <label class="col-sm-4">Monday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Monday"> </label>
+            <label class="col-sm-4">Tuesday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Tuesday"> </label>
+            <label class="col-sm-4">Wednesday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Wednesday"> </label>
+            <label class="col-sm-4">Thurusday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Thurusday"> </label>
+            <label class="col-sm-4">Friday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Friday"> </label>
+            <label class="col-sm-4">Saturday <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Saturday"> </label>
+            <label class="col-sm-4">Class created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classCreated"> </label>
+            <label class="col-sm-4">Class updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.classUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Dormitories</h4>
+            <label class="col-sm-4">Dormitories <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Dormitories"> </label>
+            <label class="col-sm-4">Add dormitory <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addDormitories"> </label>
+            <label class="col-sm-4">List dormitories <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listDormitories"> </label>
+            <label class="col-sm-4">Dormitory Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.DormName"> </label>
+            <label class="col-sm-4">Dormitory Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.DormDesc"> </label>
+            <label class="col-sm-4">No dormitories <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noDorm"> </label>
+            <label class="col-sm-4">Add Dormitory <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addDorm"> </label>
+            <label class="col-sm-4">Edit Dormitory <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editDorm"> </label>
+            <label class="col-sm-4">Dormitory created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.dormCreated"> </label>
+            <label class="col-sm-4">Dormitory updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.dormUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Events / News Board</h4>
+            <label class="col-sm-4">News & Events <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.NewsEvents"></label>
+            <label class="col-sm-4">News Board <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsboard"> </label>
+            <label class="col-sm-4">Events <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.events"> </label>
+            <label class="col-sm-4">List news <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listNews"> </label>
+            <label class="col-sm-4">Add News <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addNews"> </label>
+            <label class="col-sm-4">News title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsTitle"> </label>
+            <label class="col-sm-4">News content <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsContent"> </label>
+            <label class="col-sm-4">No news <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noNews"> </label>
+            <label class="col-sm-4">Edit News <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editNews"> </label>
+            <label class="col-sm-4">List events <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listEvents"> </label>
+            <label class="col-sm-4">Event Name / Place <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventNamePlace"> </label>
+            <label class="col-sm-4">Event Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventDescription"> </label>
+            <label class="col-sm-4">No events <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noEvents"> </label>
+            <label class="col-sm-4">Add event <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addEvent"> </label>
+            <label class="col-sm-4">Event Title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventTitle"> </label>
+            <label class="col-sm-4">Event Place <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventPlace"> </label>
+            <label class="col-sm-4">Edit event <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editEvent"> </label>
+            <label class="col-sm-4">Event created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventCreated"> </label>
+            <label class="col-sm-4">Event modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.eventModified"> </label>
+            <label class="col-sm-4">News created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsCreated"> </label>
+            <label class="col-sm-4">News modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newsModified"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Exams</h4>
+            <label class="col-sm-4">Exams List <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examsList"> </label>
+            <label class="col-sm-4">Add exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addExam"> </label>
+            <label class="col-sm-4">List exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listExams"> </label>
+            <label class="col-sm-4">Exam Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examName"> </label>
+            <label class="col-sm-4">Exam Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examDesc"> </label>
+            <label class="col-sm-4">Show marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.showMarks"> </label>
+            <label class="col-sm-4">Mark <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mark"> </label>
+            <label class="col-sm-4">Send marks notifications <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendExamMarks"> </label>
+            <label class="col-sm-4">No exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noExams"> </label>
+            <label class="col-sm-4">Select class & subject for exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.selClassSubExam"> </label>
+            <label class="col-sm-4">Add marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addMarks"> </label>
+            <label class="col-sm-4">Control marks for Exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.controlMarksExam"> </label>
+            <label class="col-sm-4">Attendance Marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.attendanceMakrs"> </label>
+            <label class="col-sm-4">Exam Marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examMarks"> </label>
+            <label class="col-sm-4">Add/Update Marks <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addUpdateMarks"> </label>
+            <label class="col-sm-4">Grade levels <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeLevels"> </label>
+            <label class="col-sm-4">Add Grade level <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addLevel"> </label>
+            <label class="col-sm-4">List grades <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listMarks"> </label>
+            <label class="col-sm-4">Grade Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeName"> </label>
+            <label class="col-sm-4">Grade Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeDesc"> </label>
+            <label class="col-sm-4">Grade Point <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradePoint"> </label>
+            <label class="col-sm-4">No grades <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noGrades"> </label>
+            <label class="col-sm-4">Grade From <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeFrom"> </label>
+            <label class="col-sm-4">Grade To <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeTo"> </label>
+            <label class="col-sm-4">Edit grade <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editGrade"> </label>
+            <label class="col-sm-4">Grade created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeCreated"> </label>
+            <label class="col-sm-4">Grade updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.gradeUpdated"> </label>
+            <label class="col-sm-4">Online Exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.onlineExams"> </label>
+            <label class="col-sm-4">Exam Deadline <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examDeadline"> </label>
+            <label class="col-sm-4">Take exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.takeExam"> </label>
+            <label class="col-sm-4">Show grade after finish exams <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.showExamGradesAfter"> </label>
+            <label class="col-sm-4">Questions <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Questions"> </label>
+            <label class="col-sm-4">Question <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Question"> </label>
+            <label class="col-sm-4">Answers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Answers"> </label>
+            <label class="col-sm-4">True Answer <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.trueAns"> </label>
+            <label class="col-sm-4">Add question <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addQuestion"> </label>
+            <label class="col-sm-4">Info Box <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.infoBox"> </label>
+            <label class="col-sm-4">Edit Exam <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editExam"> </label>
+            <label class="col-sm-4">Submit answers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.submitAnswers"> </label>
+            <label class="col-sm-4">Grade <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Grade"> </label>
+            <label class="col-sm-4">Average Points <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AveragePoints"> </label>
+            <label class="col-sm-4">Exam created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examCreated"> </label>
+            <label class="col-sm-4">Exam modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examModified"> </label>
+            <label class="col-sm-4">Exam details notifications <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examDetailsNot"> </label>
+            <label class="col-sm-4">Please adjust exam notifications first from General settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.adjustExamNot"> </label>
+            <label class="col-sm-4">Notifications sent successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.examNotSent"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Languages</h4>
+            <label class="col-sm-4">Languages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Languages"> </label>
+            <label class="col-sm-4">Add language <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addLanguage"> </label>
+            <label class="col-sm-4">List languages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listLanguage"> </label>
+            <label class="col-sm-4">No languages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noLanguage"> </label>
+            <label class="col-sm-4">Language Name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.languageName"> </label>
+            <label class="col-sm-4">Language phrases <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.languagePhrases"> </label>
+            <label class="col-sm-4">Edit Language <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editLanguage"> </label>
+            <label class="col-sm-4">Language created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.langCreated"> </label>
+            <label class="col-sm-4">Language updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.langModified"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Library</h4>
+            <label class="col-sm-4">Library <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Library"> </label>
+            <label class="col-sm-4">Add Book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addBook"> </label>
+            <label class="col-sm-4">List Books <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listBooks"> </label>
+            <label class="col-sm-4">Book title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookTitle"> </label>
+            <label class="col-sm-4">Book Author <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookAuthor"> </label>
+            <label class="col-sm-4">Book Price / State <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookPriceState"> </label>
+            <label class="col-sm-4">No books <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noBooks"> </label>
+            <label class="col-sm-4">Book Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookDescription"> </label>
+            <label class="col-sm-4">Book Type <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookType"> </label>
+            <label class="col-sm-4">Traditional Book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.traditionalBook"> </label>
+            <label class="col-sm-4">Electronic Book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.electronicBook"> </label>
+            <label class="col-sm-4">Book Price <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookPrice"> </label>
+            <label class="col-sm-4">Upload book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.uploadBook"> </label>
+            <label class="col-sm-4">State <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.State"> </label>
+            <label class="col-sm-4">Edit book <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editBook"> </label>
+            <label class="col-sm-4">Book added successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookAdded"> </label>
+            <label class="col-sm-4">Book modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.bookModified"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Mail / SMS</h4>
+            <label class="col-sm-4">Mail / SMS <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailsms"> </label>
+            <label class="col-sm-4">SMS <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sms"> </label>
+            <label class="col-sm-4">List of sent messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listSentMessages"> </label>
+            <label class="col-sm-4">Mail/SMS Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailsmsSettings"> </label>
+            <label class="col-sm-4">Select users <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.selUsers"> </label>
+            <label class="col-sm-4">Type of users <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.typeUsers"> </label>
+            <label class="col-sm-4">Send as <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendAs"> </label>
+            <label class="col-sm-4">Message Title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.messageTitle"> </label>
+            <label class="col-sm-4">Message Content <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.messageContent"> </label>
+            <label class="col-sm-4">Send Mail / SMS <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailSMSSend"> </label>
+            <label class="col-sm-4">List Messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listMessages"> </label>
+            <label class="col-sm-4">Type / Date <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.typeDate"> </label>
+            <label class="col-sm-4">Sender <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Sender"> </label>
+            <label class="col-sm-4">No messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noMessages"> </label>
+            <label class="col-sm-4">SMS Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.smsSettings"> </label>
+            <label class="col-sm-4">SMS Provider <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.smsProvider"> </label>
+            <label class="col-sm-4">Mail Settings <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailSettings"> </label>
+            <label class="col-sm-4">Mail Delivery Type <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailDeliverType"> </label>
+            <label class="col-sm-4">Mail / SMS Templates <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailsmsTemplates"> </label>
+            <label class="col-sm-4">List templates <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listTemplates"> </label>
+            <label class="col-sm-4">Template title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.templateTitle"> </label>
+            <label class="col-sm-4">No templates <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noTemplates"> </label>
+            <label class="col-sm-4">Edit template <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editTemplate"> </label>
+            <label class="col-sm-4">Template variables <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.templateVars"> </label>
+            <label class="col-sm-4">Mail template <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mailTemplate"> </label>
+            <label class="col-sm-4">SMS template <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.smsTemplate"> </label>
+            <label class="col-sm-4">Template updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.templateUpdated"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Media</h4>
+            <label class="col-sm-4">Media Center <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaCenter"> </label>
+            <label class="col-sm-4">Go to up <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.goUp"> </label>
+            <label class="col-sm-4">Upload media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.uploadMedia"> </label>
+            <label class="col-sm-4">Add album <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addAlbum"> </label>
+            <label class="col-sm-4">Albums <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albums"> </label>
+            <label class="col-sm-4">Media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.media"> </label>
+            <label class="col-sm-4">No media exist in this album <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noMediaInAlbum"> </label>
+            <label class="col-sm-4">Album title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumTitle"> </label>
+            <label class="col-sm-4">Album description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumDesc"> </label>
+            <label class="col-sm-4">Album image <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumImage"> </label>
+            <label class="col-sm-4">Edit album <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editAlbum"> </label>
+            <label class="col-sm-4">Add media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addMedia"> </label>
+            <label class="col-sm-4">Media title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaTitle"> </label>
+            <label class="col-sm-4">Media description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaDesc"> </label>
+            <label class="col-sm-4">Media image <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaImage"> </label>
+            <label class="col-sm-4">Edit media <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editMedia"> </label>
+            <label class="col-sm-4">Album created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumCreated"> </label>
+            <label class="col-sm-4">Album modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.albumModified"> </label>
+            <label class="col-sm-4">Media created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaCreated"> </label>
+            <label class="col-sm-4">Media modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.mediaModified"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Messages</h4>
+            <label class="col-sm-4">Messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Messages"> </label>
+            <label class="col-sm-4">Mark as read <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.markRead"> </label>
+            <label class="col-sm-4">Mark as unread <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.markUnread"> </label>
+            <label class="col-sm-4">Compose Message <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.composeMessage"> </label>
+            <label class="col-sm-4">No messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noMessages"> </label>
+            <label class="col-sm-4">Load old messages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.loadOldMessages"> </label>
+            <label class="col-sm-4">Type reply ( press enter to submit ) ... <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.typeReply"> </label>
+            <label class="col-sm-4">Send new message <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendMessage"> </label>
+            <label class="col-sm-4">Send message to (username) <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.sendMessageTo"> </label>
+            <label class="col-sm-4">Message <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.message"> </label>
+            <label class="col-sm-4">Read Message <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.readMessage"> </label>
+            <label class="col-sm-4">The message you try to reach not exist <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.messageNotExist"> </label>
+            <label class="col-sm-4">User isn't exist <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.userisntExist"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Payments</h4>
+            <label class="col-sm-4">Payments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Payments"> </label>
+            <label class="col-sm-4">Add payment <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addPayment"> </label>
+            <label class="col-sm-4">List payments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listPayments"> </label>
+            <label class="col-sm-4">Payment Title / Date <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentTitleDate"> </label>
+            <label class="col-sm-4">Payment Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentDesc"> </label>
+            <label class="col-sm-4">Amount <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Amount"> </label>
+            <label class="col-sm-4">PAID <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paid"> </label>
+            <label class="col-sm-4">UNPAID <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.unpaid"> </label>
+            <label class="col-sm-4">View invoice <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.viewInvoice"> </label>
+            <label class="col-sm-4">No payments <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noPayments"> </label>
+            <label class="col-sm-4">Payment Title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentTitle"> </label>
+            <label class="col-sm-4">Selecting multiple students will generate seperate invoice for each one <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentSelectMultiple"> </label>
+            <label class="col-sm-4">Edit payment <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editPayment"> </label>
+            <label class="col-sm-4">Product <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Product"> </label>
+            <label class="col-sm-4">Subtotal <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Subtotal"> </label>
+            <label class="col-sm-4">Amount Due <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AmountDue"> </label>
+            <label class="col-sm-4">Total <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Total"> </label>
+            <label class="col-sm-4">List payment details <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listPaymentDetail"> </label>
+            <label class="col-sm-4">Payments created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentCreated"> </label>
+            <label class="col-sm-4">Payments modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentModified"> </label>
+            <label class="col-sm-4">Payment details <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.paymentDetails"> </label>
+            <label class="col-sm-4">No Payment Details exist <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noPaymentDetails"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Polls</h4>
+            <label class="col-sm-4">Polls <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Polls"> </label>
+            <label class="col-sm-4">Add poll <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addPoll"> </label>
+            <label class="col-sm-4">List polls <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listPolls"> </label>
+            <label class="col-sm-4">Poll title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollTitle"> </label>
+            <label class="col-sm-4">Poll target <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollTarget"> </label>
+            <label class="col-sm-4">Poll status <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollStatus"> </label>
+            <label class="col-sm-4">No Polls <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noPolls"> </label>
+            <label class="col-sm-4">Poll Options <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollOptions"> </label>
+            <label class="col-sm-4">New Option <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.newOption"> </label>
+            <label class="col-sm-4">Edit poll <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editPoll"> </label>
+            <label class="col-sm-4">Vote poll <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.votePoll"> </label>
+            <label class="col-sm-4">You already voted before <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.alreadyvoted"> </label>
+            <label class="col-sm-4">Poll created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollCreated"> </label>
+            <label class="col-sm-4">Activate Poll <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.activatePoll"> </label>
+            <label class="col-sm-4">Poll activated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollActivated"> </label>
+            <label class="col-sm-4">Poll updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pollUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Static pages</h4>
+            <label class="col-sm-4">Static pages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.staticPages"> </label>
+            <label class="col-sm-4">Control Pages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.controlPages"> </label>
+            <label class="col-sm-4">Add page <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addPage"> </label>
+            <label class="col-sm-4">List pages <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listPages"> </label>
+            <label class="col-sm-4">Page title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageTitle"> </label>
+            <label class="col-sm-4">Page content <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageContent"> </label>
+            <label class="col-sm-4">Edit page <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editPage"> </label>
+            <label class="col-sm-4">Active / Inactive page <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.activeInactivePage"> </label>
+            <label class="col-sm-4">Page created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageCreated"> </label>
+            <label class="col-sm-4">Page modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageModified"> </label>
+            <label class="col-sm-4">Page changed successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.pageChanged"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Subjects</h4>
+            <label class="col-sm-4">Subjects <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Subjects"> </label>
+            <label class="col-sm-4">Subject <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Subject"> </label>
+            <label class="col-sm-4">Add subject <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addSubject"> </label>
+            <label class="col-sm-4">Subject name <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.subjectName"> </label>
+            <label class="col-sm-4">No subjects <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noSubjects"> </label>
+            <label class="col-sm-4">Edit Subject <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editSubject"> </label>
+            <label class="col-sm-4">Subject created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.subjectCreated"> </label>
+            <label class="col-sm-4">Subject edited successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.subjectEdited"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Transportation</h4>
+            <label class="col-sm-4">Transportation <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Transportation"> </label>
+            <label class="col-sm-4">Add transport <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addTransport"> </label>
+            <label class="col-sm-4">List transportation <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listTransport"> </label>
+            <label class="col-sm-4">Transport title <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.transportTitle"> </label>
+            <label class="col-sm-4">Transport Description <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.transportDesc"> </label>
+            <label class="col-sm-4">Driver Contact <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.driverContact"> </label>
+            <label class="col-sm-4">Fare <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Fare"> </label>
+            <label class="col-sm-4">List subscribers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listSubs"> </label>
+            <label class="col-sm-4">No Transportation <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noTransportation"> </label>
+            <label class="col-sm-4">Edit Transport <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editTransport"> </label>
+            <label class="col-sm-4">Contact <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Contact"> </label>
+            <label class="col-sm-4">No matches <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noMatches"> </label>
+            <label class="col-sm-4">Transportation created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.transportCreated"> </label>
+            <label class="col-sm-4">Transportation updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.transportUpdated"> </label>
+            
+            <div class="clearfix"></div>
+            <h4>Users</h4>
+            <label class="col-sm-4">Parents <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parents"> </label>
+            <label class="col-sm-4">Parent <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parent"> </label>
+            <label class="col-sm-4">Students <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.students"> </label>
+            <label class="col-sm-4">Student <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.student"> </label>
+            <label class="col-sm-4">Teachers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teachers"> </label>
+            <label class="col-sm-4">Teacher <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teacher"> </label>
+            <label class="col-sm-4">Role <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.role"> </label>
+            <label class="col-sm-4">Add teacher <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addTeacher"> </label>
+            <label class="col-sm-4">Waiting approval <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.waitingApproval"> </label>
+            <label class="col-sm-4">List teachers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listTeachers"> </label>
+            <label class="col-sm-4">No teachers <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noTeachers"> </label>
+            <label class="col-sm-4">Approve <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Approve"> </label>
+            <label class="col-sm-4">Edit Teacher <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.EditTeacher"> </label>
+            <label class="col-sm-4">File to import <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.fileToImport"> </label>
+            <label class="col-sm-4">Add student <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.addStudent"> </label>
+            <label class="col-sm-4">List students <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listStudents"> </label>
+            <label class="col-sm-4">Marksheet <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Marksheet"> </label>
+            <label class="col-sm-4">No students <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noStudents"> </label>
+            <label class="col-sm-4">Roll id <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.rollid"> </label>
+            <label class="col-sm-4">Edit student <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editStudent"> </label>
+            <label class="col-sm-4">Add parent <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.AddParent"> </label>
+            <label class="col-sm-4">List parents <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.listParents"> </label>
+            <label class="col-sm-4">No parents <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.noParents"> </label>
+            <label class="col-sm-4">Profession <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Profession"> </label>
+            <label class="col-sm-4">Student Details <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentDetails"> </label>
+            <label class="col-sm-4">Relation <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Relation"> </label>
+            <label class="col-sm-4">Edit Parent <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.editParent"> </label>
+            <label class="col-sm-4">This file not represent CSV parents file <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.csvParentInvalid"> </label>
+            <label class="col-sm-4">Parent created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parentCreated"> </label>
+            <label class="col-sm-4">Parent modified successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parentModified"> </label>
+            <label class="col-sm-4">Profile <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Profile"> </label>
+            <label class="col-sm-4">Parent Information <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.parentInfo"> </label>
+            <label class="col-sm-4">Student Information <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentInfo"> </label>
+            <label class="col-sm-4">Teacher Information <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teacherInfo"> </label>
+            <label class="col-sm-4">This file not represent CSV student file <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.csvStudentInvalid"> </label>
+            <label class="col-sm-4">Student created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentCreatedSuccess"> </label>
+            <label class="col-sm-4">Student has no marks till now <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentHaveNoMarks"> </label>
+            <label class="col-sm-4">Student modified successfully<br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentModified"> </label>
+            <label class="col-sm-4">This file not represent CSV teacher file <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.csvTeacherInvalid"> </label>
+            <label class="col-sm-4">Teacher created successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teacherCreated"> </label>
+            <label class="col-sm-4">Teacher updated successfully <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.teacherUpdated"> </label>
+
+            <div class="clearfix"></div>
+            <h4>Promotion</h4>
+            <label class="col-sm-4">Promotion <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.Promotion"> </label>
+            <label class="col-sm-4">Promote students <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.promoteStudents"> </label>
+            <label class="col-sm-4">Students to be promoted <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentsToBPronoted"> </label>
+            <label class="col-sm-4">Students will promoted to class <br/><input type="text" name="languagePhrases" ng-model="form.languagePhrases.studentsPromotedClass"> </label>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editLang.$invalid">{{phrase.editLanguage}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

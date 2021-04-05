@@ -1,0 +1,382 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.mailsms}}
+    </h1>
+</section>
+
+<section class="content" ng-show="views.send">
+  <a ng-click="getSents()" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.listSentMessages}}</a>  
+  <a ng-click="settings()" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.mailsmsSettings}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.selUsers}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" ng-submit="saveAdd()" name="mailsms" novalidate>
+        <div class="form-group" ng-class="{'has-error': mailsms.userType.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.typeUsers}} *</label>
+          <div class="col-sm-10">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="userType" value="teachers" ng-model="form.userType" required ng-checked='true'>
+                    {{phrase.teachers}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="userType" value="students" ng-model="form.userType" required >
+                    {{phrase.students}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="userType" value="parents" ng-model="form.userType" required >
+                    {{phrase.parents}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-show="form.userType == 'students'">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.class}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.classId" name="classId" >
+              <option value="0">{{phrase.all}}</option>
+              <option ng-repeat="class in classes" value="{{class.id}}">{{class.className}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': mailsms.sendForm.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.sendAs}} *</label>
+          <div class="col-sm-10">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="sendForm" value="email" ng-model="form.sendForm" required ng-checked='true'>
+                    {{phrase.email}}
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="sendForm" value="sms" ng-model="form.sendForm" required >
+                    {{phrase.sms}}
+                </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-show="form.sendForm == 'email'">
+          <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.messageTitle}} *</label>
+          <div class="col-sm-10">
+            <input type="text" name="messageTitle" ng-model="form.messageTitle" class="form-control" placeholder="{{phrase.messageTitle}}">
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': mailsms.messageContent.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.messageContent}} *</label>
+          <div class="col-sm-10">
+            <textarea ck-editor name="messageContent" class="form-control" ng-model="form.messageContent" required placeholder="{{phrase.messageContent}}"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="mailsms.$invalid">{{phrase.mailSMSSend}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.list">
+  <a ng-click="changeView('send')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.listMessages}}</h3>
+          <div class="box-tools">
+              <div class="input-group pull-right">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.to}}</th>
+                  <th>{{phrase.typeDate}}</th>
+                  <th>{{phrase.details}}</th>
+                  <th>{{phrase.Sender}}</th>
+              </tr>
+              <tr ng-repeat="message in messages | filter:searchText">
+                  <td>{{message.id}}</td>
+                  <td>{{message.mailTo}}</td>
+                  <td>{{message.mailType}} <br/> {{message.messageDate}}</td>
+                  <td>{{message.messageData}}</td>
+                  <td>{{message.messageSender}}</td>
+              </tr>
+              <tr ng-show="!messages.length"><td class="noTableData" colspan="5">{{phrase.noMessages}}</td></tr>
+          </tbody></table>
+        </div>
+  </div>
+</section>
+
+
+<section class="content" ng-show="views.settings">
+  <a ng-click="changeView('send')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.smsSettings}}</h3>
+      </div>
+      <div class="box-body table-responsive">
+        <form class="form-horizontal" name="setSettings" role="form" ng-submit="saveSettings()" novalidate>
+          <div class="form-group" ng-class="{'has-error': addExam.examSubject.$invalid}">
+            <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.smsProvider}} *</label>
+            <div class="col-sm-10">
+              <select class="form-control" ng-model="formS.smsProvider" required name="smsProvider">
+                <option value="nexmo">Nexmo</option>
+                <option value="twilio">Twilio</option>
+                <option value="hoiio">hoiio</option>
+                <option value="clickatell">ClickAtell</option>
+                <option value="intellisms">IntelliSMS</option>
+                <option value="bulksms">Bulksms</option>
+                <option value="concepto">Concepto ( liveair.in )</option>
+                <option value="msg91">Msg91</option>
+              </select>
+            </div>
+          </div>
+          
+          <div ng-show="formS.smsProvider == 'nexmo'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Nexmo Api Key * </label>
+              <div class="col-sm-10">
+                <input type="text" name="nexmoApiKey" ng-model="formS.nexmoApiKey" class="form-control" placeholder="Nexmo Api Key">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Nexmo Api Secret * </label>
+              <div class="col-sm-10">
+                <input type="text" name="nexmoApiSecret" ng-model="formS.nexmoApiSecret" class="form-control" placeholder="Nexmo Api Secret">
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="formS.smsProvider == 'twilio'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Twilio account SID * </label>
+              <div class="col-sm-10">
+                <input type="text" name="twilioSID" ng-model="formS.twilioSID" class="form-control" placeholder="Twilio Account SID">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Twilio auth token * </label>
+              <div class="col-sm-10">
+                <input type="text" name="twilioToken" ng-model="formS.twilioToken" class="form-control" placeholder="Twilio Auth Token">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Twilio from number * </label>
+              <div class="col-sm-10">
+                <input type="text" name="twilioFN" ng-model="formS.twilioFN" class="form-control" placeholder="Twilio from number">
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="formS.smsProvider == 'hoiio'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Hoiio App ID * </label>
+              <div class="col-sm-10">
+                <input type="text" name="hoiioAppId" ng-model="formS.hoiioAppId" class="form-control" placeholder="Hoiio App ID">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Hoiio Access token * </label>
+              <div class="col-sm-10">
+                <input type="text" name="hoiioAccessToken" ng-model="formS.hoiioAccessToken" class="form-control" placeholder="Hoiio Access Token">
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="formS.smsProvider == 'clickatell'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Clickatell Username * </label>
+              <div class="col-sm-10">
+                <input type="text" name="clickatellUserName" ng-model="formS.clickatellUserName" class="form-control" placeholder="Clickatell Username">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Clickatell Password * </label>
+              <div class="col-sm-10">
+                <input type="text" name="clickatellPassword" ng-model="formS.clickatellPassword" class="form-control" placeholder="Clickatell Password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Clickatell Api Key * </label>
+              <div class="col-sm-10">
+                <input type="text" name="clickatellApiKey" ng-model="formS.clickatellApiKey" class="form-control" placeholder="Clickatell Api Key">
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="formS.smsProvider == 'intellisms'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Intellisms Username * </label>
+              <div class="col-sm-10">
+                <input type="text" name="intellismsUserName" ng-model="formS.intellismsUserName" class="form-control" placeholder="Intellisms Username">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Intellisms Password * </label>
+              <div class="col-sm-10">
+                <input type="text" name="intellismsPassword" ng-model="formS.intellismsPassword" class="form-control" placeholder="Intellisms Password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Intellisms Sender Number * </label>
+              <div class="col-sm-10">
+                <input type="text" name="intellismsSenderNumber" ng-model="formS.intellismsSenderNumber" class="form-control" placeholder="Intellisms Sender Number">
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="formS.smsProvider == 'bulksms'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Bulksms Username * </label>
+              <div class="col-sm-10">
+                <input type="text" name="bulksmsUserName" ng-model="formS.bulksmsUserName" class="form-control" placeholder="Bulksms Username">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Intellisms Password * </label>
+              <div class="col-sm-10">
+                <input type="text" name="bulksmsPassword" ng-model="formS.bulksmsPassword" class="form-control" placeholder="Bulksms Password">
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="formS.smsProvider == 'concepto'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Concepto Username * </label>
+              <div class="col-sm-10">
+                <input type="text" name="conceptoUserName" ng-model="formS.conceptoUserName" class="form-control" placeholder="Concepto Username">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Concepto Password * </label>
+              <div class="col-sm-10">
+                <input type="text" name="conceptoPassword" ng-model="formS.conceptoPassword" class="form-control" placeholder="Concepto Password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Concepto Sender Id * </label>
+              <div class="col-sm-10">
+                <input type="text" name="conceptoSenderId" ng-model="formS.conceptoSenderId" class="form-control" placeholder="Concepto Sender Id">
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="formS.smsProvider == 'msg91'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Msg91 Authkey * </label>
+              <div class="col-sm-10">
+                <input type="text" name="msg91Authkey" ng-model="formS.msg91Authkey" class="form-control" placeholder="Msg91 Authkey">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Msg91 SenderId * </label>
+              <div class="col-sm-10">
+                <input type="text" name="msg91SenderId" ng-model="formS.msg91SenderId" class="form-control" placeholder="Msg91 SenderId">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-default">{{phrase.saveSettings}}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.mailSettings}}</h3>
+      </div>
+      <div class="box-body table-responsive">
+        <form class="form-horizontal" name="setMailSettings" role="form" ng-submit="saveMailSettings()" novalidate>
+          <div class="form-group" ng-class="{'has-error': addExam.examSubject.$invalid}">
+            <label for="inputEmail3" class="col-sm-2 control-label">{{phrase.mailDeliverType}} *</label>
+            <div class="col-sm-10">
+              <select class="form-control" ng-model="formM.mailProvider" required name="mailProvider">
+                <option value="mail">Simple PHP Mail function</option>
+                <option value="phpmailer">PHP Mailer Class</option>
+                <option value="smtp">SMTP</option>
+                <option value="ses">Amazon SES</option>
+              </select>
+            </div>
+          </div>
+          
+          <div ng-show="formM.mailProvider == 'smtp'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">SMTP Server * </label>
+              <div class="col-sm-10">
+                <input type="text" name="smtpHost" ng-model="formM.smtpHost" class="form-control" placeholder="Sets the SMTP server">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">SMTP Port * </label>
+              <div class="col-sm-10">
+                <input type="text" name="smtpPort" ng-model="formM.smtpPort" class="form-control" placeholder="Sets the SMTP port">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">SMTP User Name * </label>
+              <div class="col-sm-10">
+                <input type="text" name="smtpUserName" ng-model="formM.smtpUserName" class="form-control" placeholder="Sets the SMTP server User Name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">SMTP Password * </label>
+              <div class="col-sm-10">
+                <input type="text" name="smtpPassWord" ng-model="formM.smtpPassWord" class="form-control" placeholder="Sets the SMTP server Password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">SMTP TLS/SSL * </label>
+              <div class="col-sm-10">
+                <select class="form-control" ng-model="formM.smtpTLS" required name="smtpTLS">
+                  <option value="">None</option>
+                  <option value="SSL">SSL</option>
+                  <option value="TLS">TLS</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div ng-show="formM.mailProvider == 'ses'">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Amazon SES Access key </label>
+              <div class="col-sm-10">
+                <input type="text" name="AmazonSESAccessKey" ng-model="formM.AmazonSESAccessKey" class="form-control" placeholder="Sets the Amazon SES Service Access Key">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Amazon SES Secret key * </label>
+              <div class="col-sm-10">
+                <input type="text" name="AmazonSESSecretKey" ng-model="formM.AmazonSESSecretKey" class="form-control" placeholder="Sets the Amazon SES Service Secret Key">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Amazon SES verified e-mail address * </label>
+              <div class="col-sm-10">
+                <input type="text" name="AmazonSESVerifiedSender" ng-model="formM.AmazonSESVerifiedSender" class="form-control" placeholder="Sets the SMTP server User Name">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-default">{{phrase.saveSettings}}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+</section>

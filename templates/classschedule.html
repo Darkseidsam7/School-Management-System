@@ -1,0 +1,217 @@
+ <section class="content-header">
+    <h1>
+        {{phrase.classSch}}
+    </h1>
+</section>
+
+
+<section class="content" ng-show="views.list">
+  <div class="box col-xs-12">
+      <div class="box-header">
+          <h3 class="box-title">{{phrase.classEditSch}}</h3>
+          <div class="box-tools">
+              <div class="input-group">
+                  <input type="text" name="table_search" ng-model="searchText" class="form-control input-sm pull-right" style="width: 150px;" placeholder="{{phrase.Search}}">
+                  <div class="input-group-btn">
+                      <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="box-body table-responsive">
+          <table class="table table-hover">
+              <tbody><tr>
+                  <th>{{phrase.ID}}</th>
+                  <th>{{phrase.className}}</th>
+                  <th>{{phrase.Operations}}</th>
+              </tr>
+              <tr ng-repeat="class in classes | filter:searchText">
+                  <td>{{class.id}}</td>
+                  <td>{{class.className}}</td>
+                  <td>
+                    <a ng-click="edit(class.id)" type="button" class="btn btn-info btn-flat" title="{{phrase.ReadSchedule}}" tooltip><i class="fa fa-fw fa-th-list"></i></a>
+                  </td>
+              </tr>
+              <tr ng-show="!classes.length"><td class="noTableData" colspan="3">{{phrase.NoClasses}}</td></tr>
+          </tbody></table>
+      </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.edit">
+  <a ng-click="changeView('list')" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <a href="javascript:window.print()" class="floatRTL btn btn-success btn-flat pull-right marginBottom15">{{phrase.Print}}</a>
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editClassSch}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editDorm" role="form" ng-submit="saveEdit()" novalidate>
+        <table class="table table-bordered table-hover">
+          <tbody>
+            <tr>
+                <th style="width: 10px">{{phrase.Day}}</th>
+                <th>{{phrase.ClassSchedule}}</th>
+                <th ng-if="userRole == 'admin'" style="width: 10px">Add</th>
+            </tr>
+            <tr ng-repeat="sch in classSchedule">
+                <td>{{sch.dayName}}</td>
+                <td>
+                  <div class="btn-group" ng-repeat="subSch in sch.sub">
+                      <button type="button" class="btn btn-default">{{subSch.subjectId}} - {{subSch.start}} -> {{subSch.end}}</button>
+                      <button ng-if="userRole == 'admin'" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                          <span class="caret"></span>
+                          <span class="sr-only">{{phrase.toggleDropdown}}</span>
+                      </button>
+                      <ul ng-if="userRole == 'admin'" class="dropdown-menu" role="menu">
+                        <li><a ng-click="editSubOne(subSch.id)">{{phrase.Edit}}</a></li>
+                        <li><a ng-click="removeSub(subSch.id)">{{phrase.Remove}}</a></li>
+                      </ul>
+                  </div>
+                </td>
+                <td ng-if="userRole == 'admin'">
+                  <a ng-click="addSubOne()" type="button" class="btn btn-info btn-flat"><i class="fa fa-fw fa-plus"></i></a>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.addSub">
+  <a ng-click="views.addSub = false" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editClassSch}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="addSubForm" role="form" ng-submit="saveAddSub()" novalidate>
+        <div class="form-group" ng-class="{'has-error': addSubForm.subjectId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Subject}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.subjectId" required name="subjectId">
+              <option ng-repeat="subjectOne in subject" value="{{subjectOne.id}}">{{subjectOne.subjectTitle}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addSubForm.dayOfWeek.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Day}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.dayOfWeek" required name="dayOfWeek">
+              <option ng-repeat="(key, value) in days" value="{{key}}">{{value}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addSubForm.startTimeHour.$invalid || addSubForm.startTimeMin.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.startTime}} *</label>
+          <div class="col-sm-10">
+            <div class="row">
+              <div class="col-xs-3">
+                <select class="form-control" ng-model="form.startTimeHour" required name="startTimeHour">
+                  <option ng-repeat="i in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]" value="{{i}}">{{i}}</option>
+                </select>
+              </div>
+              <div class="col-xs-3">
+                <select class="form-control" ng-model="form.startTimeMin" required name="startTimeMin">
+                  <option ng-repeat="i in [00,05,10,15,20,25,30,35,40,45,50,55]" value="{{i}}">{{i}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': addSubForm.endTimeHour.$invalid || addSubForm.endTimeMin.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.endTime}} *</label>
+          <div class="col-sm-10">
+            <div class="row">
+              <div class="col-xs-3">
+                <select class="form-control" ng-model="form.endTimeHour" required name="endTimeHour">
+                  <option ng-repeat="i in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]" value="{{i}}">{{i}}</option>
+                </select>
+              </div>
+              <div class="col-xs-3">
+                <select class="form-control" ng-model="form.endTimeMin" required name="endTimeMin">
+                  <option ng-repeat="i in [00,05,10,15,20,25,30,35,40,45,50,55]" value="{{i}}">{{i}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="addSubForm.$invalid || $isUploading">{{phrase.addSch}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="content" ng-show="views.editSub">
+  <a ng-click="views.addSub = false" class="floatRTL btn btn-danger btn-flat pull-right marginBottom15">{{phrase.Return}}</a>  
+  <div class="box col-xs-12">
+    <div class="box-header">
+        <h3 class="box-title">{{phrase.editClassSch}}</h3>
+    </div>
+    <div class="box-body table-responsive">
+      <form class="form-horizontal" name="editSubForm" role="form" ng-submit="saveEditSub(form.id)" novalidate>
+        <div class="form-group" ng-class="{'has-error': editSubForm.subjectId.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Subject}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.subjectId" required name="subjectId">
+              <option ng-repeat="subjectOne in subject" value="{{subjectOne.id}}">{{subjectOne.subjectTitle}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editSubForm.dayOfWeek.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.Day}} *</label>
+          <div class="col-sm-10">
+            <select class="form-control" ng-model="form.dayOfWeek" required name="dayOfWeek">
+              <option ng-repeat="(key, value) in days" value="{{key}}">{{value}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editSubForm.startTimeHour.$invalid || editSubForm.startTimeMin.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.startTime}} *</label>
+          <div class="col-sm-10">
+            <div class="row">
+              <div class="col-xs-3">
+                <select class="form-control" ng-model="form.startTimeHour" required name="startTimeHour">
+                  <option ng-repeat="i in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]" value="{{i}}">{{i}}</option>
+                </select>
+              </div>
+              <div class="col-xs-3">
+                <select class="form-control" ng-model="form.startTimeMin" required name="startTimeMin">
+                  <option ng-repeat="v in [0,5,10,15,20,25,30,35,40,45,50,55]" value="{{v}}">{{v}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error': editSubForm.endTimeHour.$invalid || editSubForm.endTimeMin.$invalid}">
+          <label for="inputPassword3" class="col-sm-2 control-label">{{phrase.endTime}} *</label>
+          <div class="col-sm-10">
+            <div class="row">
+              <div class="col-xs-3">
+                <select class="form-control" ng-model="form.endTimeHour" required name="endTimeHour">
+                  <option ng-repeat="x in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]" value="{{x}}">{{x}}</option>
+                </select>
+              </div>
+              <div class="col-xs-3">
+                <select class="form-control" ng-model="form.endTimeMin" required name="endTimeMin">
+                  <option ng-repeat="z in [0,5,10,15,20,25,30,35,40,45,50,55]" value="{{z}}">{{z}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default" ng-disabled="editSubForm.$invalid || $isUploading">{{phrase.editSch}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
